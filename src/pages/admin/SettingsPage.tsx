@@ -23,12 +23,12 @@ const FIELD_TOGGLES: Array<{ key: keyof Settings; title: string; description: st
   {
     key: 'visitorTypeEnabled',
     title: 'Toifa (xodim / talaba / mehmon)',
-    description: "Murojaat kim tomonidan kelganini belgilash. Masalan, Wi-Fi yoki jihoz nosozligi kabi murojaatlarda kerak bo'lmasa o'chiring.",
+    description: "Ish kim uchun bajarilganini belgilash. Masalan, server sozlash kabi ishlarda kerak bo'lmasa o'chiring.",
   },
   {
     key: 'channelEnabled',
     title: 'Murojaat turi (offline / telefon / telegram)',
-    description: "Murojaat qanday kelganini belgilash. O'chirilsa, offline/online statistikasi ham yashiriladi.",
+    description: "Ish qanday so'rov bilan kelganini belgilash. O'chirilsa, offline/online statistikasi ham yashiriladi.",
   },
   {
     key: 'appealStatusEnabled',
@@ -44,10 +44,10 @@ export function SettingsPage() {
   return (
     <>
       <PageHeader icon={SettingsIcon} title="Sozlamalar" />
-      <Card title="Murojaat formasidagi maydonlar">
+      <Card title="Ish formasidagi maydonlar">
         <p className="mb-4 text-sm text-slate-500">
           O'chirilgan maydon formadan, ro'yxatlardan, statistikadan va Excel'dan yashiriladi. Avval kiritilgan qiymatlar bazada saqlanib qoladi va
-          qayta yoqilganda ko'rinadi. "Murojaat nomi" va "Izoh" doim bor.
+          qayta yoqilganda ko'rinadi. "Ish nomi" va "Izoh" doim bor.
         </p>
         {settings.isLoading || !settings.data ? (
           <Loading />

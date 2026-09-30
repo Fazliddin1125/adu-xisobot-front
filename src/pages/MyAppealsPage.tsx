@@ -17,10 +17,10 @@ export function MyAppealsPage() {
 
   return (
     <>
-      <PageHeader icon={FileText} title="Mening murojaatlarim" subtitle={periodLabel(period)} action={<PeriodPicker value={period} onChange={setPeriod} />} />
+      <PageHeader icon={FileText} title="Mening ishlarim" subtitle={periodLabel(period)} action={<PeriodPicker value={period} onChange={setPeriod} />} />
       <div className="space-y-6">
         <StatsPanel stats={stats.data} period={period} />
-        <Card title={`Murojaatlar ro'yxati${appeals.data ? ` · ${appeals.data.length}` : ''}`}>
+        <Card title={`Ishlar ro'yxati${appeals.data ? ` · ${appeals.data.length}` : ''}`}>
           {appeals.isLoading ? <Loading /> : <AppealTable appeals={appeals.data ?? []} />}
         </Card>
       </div>

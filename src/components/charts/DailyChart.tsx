@@ -12,7 +12,7 @@ function ChartTooltip({ active, payload }: { active?: boolean; payload?: Array<{
   return (
     <div className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs shadow-md">
       <p className="text-slate-500">{p.date.split('-').reverse().join('.')}</p>
-      <p className="mt-0.5 font-semibold text-slate-900">{p.count} ta murojaat</p>
+      <p className="mt-0.5 font-semibold text-slate-900">{p.count} ta ish</p>
     </div>
   )
 }

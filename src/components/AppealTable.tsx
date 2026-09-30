@@ -72,16 +72,16 @@ export function AppealTable({ appeals, showStaff, compact }: Props) {
   if (!appeals.length) {
     return (
       <Empty icon={Inbox} hint="Boshqa davrni tanlab ko'ring">
-        Bu davrda murojaat yo'q
+        Bu davrda ish qayd etilmagan
       </Empty>
     )
   }
 
   async function handleDelete(a: Appeal) {
-    if (!confirm(`"${a.title}" murojaatini o'chirasizmi?`)) return
+    if (!confirm(`"${a.title}" ishini o'chirasizmi?`)) return
     try {
       await remove.mutateAsync(a.id)
-      toast.success("Murojaat o'chirildi")
+      toast.success("Ish o'chirildi")
     } catch (e) {
       toast.error((e as Error).message)
     }
@@ -131,10 +131,10 @@ export function AppealTable({ appeals, showStaff, compact }: Props) {
       <table className="w-full min-w-[640px] text-left text-sm">
         <thead className="text-xs font-semibold text-slate-400">
           <tr>
-            <th className="py-2 pr-3 pl-5 font-semibold">Murojaat</th>
+            <th className="py-2 pr-3 pl-5 font-semibold">Ish</th>
             {fields.channel && <th className="px-3 py-2 font-semibold">Qanday keldi</th>}
             {fields.status && <th className="px-3 py-2 font-semibold">Holat</th>}
-            {showStaff && <th className="px-3 py-2 font-semibold">Kim qabul qildi</th>}
+            {showStaff && <th className="px-3 py-2 font-semibold">Kim bajardi</th>}
             <th className="px-3 py-2 font-semibold">Izoh</th>
             <th className="py-2 pr-5 pl-3" />
           </tr>
@@ -181,7 +181,7 @@ export function AppealTable({ appeals, showStaff, compact }: Props) {
       {list}
 
       {editing && (
-        <Modal title="Murojaatni tahrirlash" onClose={() => setEditing(null)}>
+        <Modal title="Ishni tahrirlash" onClose={() => setEditing(null)}>
           <AppealForm
             initial={editing}
             submitLabel="Saqlash"

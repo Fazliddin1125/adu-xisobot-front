@@ -28,7 +28,7 @@ export function LoginPage() {
         <div className="mb-8 text-center">
           <img src="/favicon.svg" alt="" className="mx-auto size-14 rounded-lg" />
           <h1 className="mt-4 text-[26px] leading-tight font-bold text-slate-800">ADU ATM bo'limi</h1>
-          <p className="mt-1 text-[15px] text-slate-500">Murojaatlar va topshiriqlar tizimiga kiring</p>
+          <p className="mt-1 text-[15px] text-slate-500">Ishlar va topshiriqlar tizimiga kiring</p>
         </div>
         <form onSubmit={handleSubmit} className="space-y-3">
           <Field label="Login">

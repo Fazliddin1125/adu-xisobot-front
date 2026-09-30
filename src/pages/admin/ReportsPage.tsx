@@ -118,7 +118,7 @@ export function ReportsPage() {
       </>
     ),
     subtitle: r.departmentName ?? "Bo'limsiz",
-    onClick: () => navigate(`/hisobot/xodim/${r.staffId}`),
+    onClick: () => navigate(`/xodimlar/${r.staffId}`),
   }))
   const deptRows: Row[] = (staff.data?.departments ?? []).map((d: DepartmentRow) => ({
     ...d,
@@ -169,7 +169,7 @@ export function ReportsPage() {
           {staff.isLoading ? <Loading /> : <CountsTable firstHeader="Xodim" rows={staffRows} />}
         </Card>
 
-        <Card title={`Barcha murojaatlar${appeals.data ? ` · ${appeals.data.length}` : ''}`}>
+        <Card title={`Barcha ishlar${appeals.data ? ` · ${appeals.data.length}` : ''}`}>
           {appeals.isLoading ? <Loading /> : <AppealTable appeals={appeals.data ?? []} showStaff />}
         </Card>
       </div>

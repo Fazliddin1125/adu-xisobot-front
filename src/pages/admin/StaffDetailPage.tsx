@@ -22,9 +22,9 @@ export function StaffDetailPage() {
 
   return (
     <>
-      <Link to="/hisobot" className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:underline">
+      <Link to="/xodimlar" className="mb-3 inline-flex items-center gap-1 text-sm font-semibold text-brand-600 hover:underline">
         <ArrowLeft className="size-4" strokeWidth={2} aria-hidden />
-        Hisobot
+        Xodimlar
       </Link>
       <PageHeader
         icon={UserRound}
@@ -35,7 +35,7 @@ export function StaffDetailPage() {
       <div className="space-y-6">
         <StatsPanel stats={stats.data} period={period} />
         <Card
-          title={`Murojaatlar${appeals.data ? ` · ${appeals.data.length}` : ''}`}
+          title={`Ishlar${appeals.data ? ` · ${appeals.data.length}` : ''}`}
           action={
             <Button variant="secondary" onClick={() => exportAppeals(period, { staffId: id }).then(() => toast.success('Excel fayl yuklab olindi')).catch((e) => toast.error(e.message))}>
               <Download className="size-4" strokeWidth={2} aria-hidden />

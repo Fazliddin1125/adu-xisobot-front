@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BarChart3, Building2, FileText, House, ListTodo, LogOut, Menu, Settings, Users, type LucideIcon } from 'lucide-react'
+import { BarChart3, Building2, FileText, House, ListTodo, LogOut, Menu, Settings, Users, UsersRound, type LucideIcon } from 'lucide-react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { ROLE_LABELS, isManager, isSuperadmin } from '../lib/roles'
@@ -34,10 +34,12 @@ function Sidebar() {
   const { user, logout } = useAuth()
   const main: NavItem[] = [
     { to: '/', icon: House, label: 'Bosh sahifa', end: true },
-    { to: '/murojaatlar', icon: FileText, label: 'Mening murojaatlarim' },
+    { to: '/ishlar', icon: FileText, label: 'Mening ishlarim' },
     { to: '/topshiriqlar', icon: ListTodo, label: 'Topshiriqlar' },
   ]
-  if (isManager(user?.role)) main.push({ to: '/hisobot', icon: BarChart3, label: 'Hisobot' })
+  if (isManager(user?.role)) {
+    main.push({ to: '/xodimlar', icon: UsersRound, label: 'Xodimlar' }, { to: '/hisobot', icon: BarChart3, label: 'Hisobot' })
+  }
   const admin: NavItem[] = isSuperadmin(user?.role)
     ? [
         { to: '/boshqaruv/foydalanuvchilar', icon: Users, label: 'Foydalanuvchilar' },
@@ -52,7 +54,7 @@ function Sidebar() {
         <img src="/favicon.svg" alt="" className="size-8 rounded-xl" />
         <div className="min-w-0 leading-tight">
           <p className="truncate text-sm font-extrabold text-slate-800">ADU ATM</p>
-          <p className="truncate text-xs text-slate-500">Murojaatlar va topshiriqlar</p>
+          <p className="truncate text-xs text-slate-500">Ishlar va topshiriqlar</p>
         </div>
       </div>
 

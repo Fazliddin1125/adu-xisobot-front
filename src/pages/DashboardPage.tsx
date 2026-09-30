@@ -17,7 +17,7 @@ import { TASK_COLUMN } from '../lib/tasks'
 function daySummary(todayCount: number | undefined, tasks: Task[]): string {
   const parts: string[] = []
   if (todayCount === undefined) return ''
-  parts.push(todayCount === 0 ? 'Bugun hali murojaat bo\'lmadi — tinch kun.' : `Bugun ${todayCount} ta murojaatga yordam berdingiz. Barakalla!`)
+  parts.push(todayCount === 0 ? 'Bugun hali ish qayd etilmadi — tinch kun.' : `Bugun ${todayCount} ta ish bajardingiz. Barakalla!`)
   const late = tasks.filter((t) => deadlineText(t.deadline, false).tone === 'late').length
   const soon = tasks.filter((t) => deadlineText(t.deadline, false).tone === 'soon').length
   if (late) parts.push(`${late} ta topshiriqning muddati o'tib ketgan, ularga e'tibor bering.`)
@@ -61,7 +61,7 @@ export function DashboardPage() {
       </section>
 
       <div className="grid gap-6 lg:grid-cols-5">
-        <Card title="Yangi murojaat" subtitle="Bir necha soniyada qayd eting" className="lg:col-span-2">
+        <Card title="Yangi ish" subtitle="Bajarilgan ishni bir necha soniyada qayd eting" className="lg:col-span-2">
           <AppealForm
             submitLabel="Saqlash"
             resetOnSuccess
@@ -69,17 +69,17 @@ export function DashboardPage() {
             error={create.error?.message}
             onSubmit={async (input) => {
               await create.mutateAsync(input)
-              toast.success('Murojaat saqlandi. Rahmat!')
+              toast.success('Ish saqlandi. Rahmat!')
             }}
           />
         </Card>
 
-        <Card title="Bugun qabul qilganlarim" subtitle={today.data?.length ? `${today.data.length} ta murojaat` : undefined} className="lg:col-span-3">
+        <Card title="Bugun bajarganlarim" subtitle={today.data?.length ? `${today.data.length} ta ish` : undefined} className="lg:col-span-3">
           {today.isLoading ? (
             <Loading />
           ) : !today.data?.length ? (
-            <Empty icon={Coffee} hint="Kimdir murojaat qilsa, chapdagi formadan qayd eting">
-              Bugun hali murojaat yo'q
+            <Empty icon={Coffee} hint="Biror ish bajarsangiz, chapdagi formadan qayd eting">
+              Bugun hali ish qayd etilmagan
             </Empty>
           ) : (
             <AppealTable appeals={today.data} compact />

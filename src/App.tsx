@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router-dom'
+import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 import { useAuth } from './auth/AuthContext'
 import { Layout } from './components/Layout'
 import { Loading } from './components/ui'
@@ -12,7 +12,14 @@ import { DepartmentsPage } from './pages/admin/DepartmentsPage'
 import { ReportsPage } from './pages/admin/ReportsPage'
 import { SettingsPage } from './pages/admin/SettingsPage'
 import { StaffDetailPage } from './pages/admin/StaffDetailPage'
+import { StaffListPage } from './pages/admin/StaffListPage'
 import { UsersPage } from './pages/admin/UsersPage'
+
+/** Eski havolalar (/hisobot/xodim/:id) yangi manzilga yo'naltiriladi */
+function LegacyStaffRedirect() {
+  const { id } = useParams()
+  return <Navigate to={`/xodimlar/${id}`} replace />
+}
 
 export default function App() {
   const { user, loading } = useAuth()
@@ -24,13 +31,16 @@ export default function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route index element={<DashboardPage />} />
-        <Route path="murojaatlar" element={<MyAppealsPage />} />
+        <Route path="ishlar" element={<MyAppealsPage />} />
+        <Route path="murojaatlar" element={<Navigate to="/ishlar" replace />} />
         <Route path="topshiriqlar" element={<TasksPage />} />
         <Route path="profil" element={<ProfilePage />} />
         {isManager(user.role) && (
           <>
             <Route path="hisobot" element={<ReportsPage />} />
-            <Route path="hisobot/xodim/:id" element={<StaffDetailPage />} />
+            <Route path="xodimlar" element={<StaffListPage />} />
+            <Route path="xodimlar/:id" element={<StaffDetailPage />} />
+            <Route path="hisobot/xodim/:id" element={<LegacyStaffRedirect />} />
           </>
         )}
         {isSuperadmin(user.role) && (

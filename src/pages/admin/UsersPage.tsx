@@ -117,7 +117,7 @@ export function UsersPage() {
             {users.data?.map((u) => (
               <li key={u.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
                 <div>
-                  <Link to={`/hisobot/xodim/${u.id}`} className="font-medium text-slate-900 hover:text-brand-600">
+                  <Link to={`/xodimlar/${u.id}`} className="font-medium text-slate-900 hover:text-brand-600">
                     {u.fullName}
                   </Link>{' '}
                   <Badge tone={u.role === 'xodim' ? 'slate' : 'amber'}>{ROLE_LABELS[u.role]}</Badge>

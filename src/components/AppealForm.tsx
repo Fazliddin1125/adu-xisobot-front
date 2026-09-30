@@ -51,7 +51,7 @@ export function AppealForm({ initial, submitLabel, submitting, error, onSubmit, 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setLocalError('')
-    if (title.trim().length < 2) return setLocalError('Murojaat nomini kiriting')
+    if (title.trim().length < 2) return setLocalError('Ish nomini kiriting')
     if (fields.visitorType && !visitorType) return setLocalError('Toifani tanlang: xodim, talaba yoki mehmon')
     if (fields.channel && mode === 'online' && !onlineChannel) return setLocalError('Online murojaat kanalini tanlang: telefon yoki telegram')
 
@@ -72,11 +72,11 @@ export function AppealForm({ initial, submitLabel, submitting, error, onSubmit, 
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <Field label="Murojaat nomi" hint="ism yoki joy, muammo">
+      <Field label="Ish nomi" hint="nima qilindi yoki kimga">
         <Input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Masalan: Karimov Anvar yoki 3-bino, 2-qavat — Wi-Fi"
+          placeholder="Masalan: Karimov Anvar — HEMIS paroli yoki 3-bino serverini sozlash"
           maxLength={200}
           autoComplete="off"
         />
