@@ -51,7 +51,7 @@ function Sidebar() {
   return (
     <div className="flex h-full flex-col bg-sidebar">
       <div className="flex items-center gap-2.5 px-4 pt-5 pb-3">
-        <img src="/favicon.svg" alt="" className="size-8 rounded-xl" />
+        <img src="/logo.png" alt="Andijon davlat universiteti logotipi" className="size-10 rounded-full" />
         <div className="min-w-0 leading-tight">
           <p className="truncate text-sm font-extrabold text-slate-800">ADU ATM</p>
           <p className="truncate text-xs text-slate-500">Ishlar va topshiriqlar</p>
@@ -108,6 +108,7 @@ export function Layout() {
         <button onClick={() => setOpen(true)} aria-label="Menyuni ochish" className="flex size-9 items-center justify-center rounded-xl text-slate-600 hover:bg-hover">
           <Menu className="size-5" strokeWidth={1.9} />
         </button>
+        <img src="/logo.png" alt="" className="size-7 rounded-full" />
         <span className="text-sm font-semibold text-slate-800">ADU ATM</span>
       </header>
       {open && (
