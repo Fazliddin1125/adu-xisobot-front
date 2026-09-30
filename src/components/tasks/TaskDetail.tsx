@@ -1,9 +1,11 @@
 import { useState, type FormEvent } from 'react'
-import { CalendarDays, CircleDot, Clock3, Eye, Lock, Pencil, Pin, Trash2, UserRound, Users } from 'lucide-react'
+import { CalendarDays, CircleCheck, CircleDot, Undo2, Clock3, Eye, Lock, Pencil, Pin, Trash2, UserRound, Users } from 'lucide-react'
+import type { TaskStatus } from '../../api/types'
 import { useAddComment, useDeleteTask, useMoveTask, useTask } from '../../api/hooks'
 import { formatDateTime } from '../../lib/period'
 import { firstName, relativeTime } from '../../lib/humanize'
-import { MOVE_LABELS, TASK_COLUMN, formatDeadline } from '../../lib/tasks'
+import { MOVE_LABELS, TASK_COLUMN, formatDeadline, isReturn } from '../../lib/tasks'
+import { ReturnForm } from './ReturnForm'
 import { Modal } from '../Modal'
 import { Avatar, Badge, Button, ErrorText, Loading, Property, Textarea } from '../ui'
 import { useToast } from '../Toast'
@@ -27,6 +29,8 @@ export function TaskDetail({ id, onClose }: { id: string; onClose: () => void })
   const addComment = useAddComment()
   const toast = useToast()
   const [editing, setEditing] = useState(false)
+  /** Bajarilganni qaytarish uchun izoh formasi ochiqmi */
+  const [returnTo, setReturnTo] = useState<TaskStatus | null>(null)
   const [text, setText] = useState('')
 
   if (editing && task) {
@@ -99,16 +103,24 @@ export function TaskDetail({ id, onClose }: { id: string; onClose: () => void })
 
           {(task.allowedStatuses.length > 0 || task.canManage) && (
             <div className="mb-4 flex flex-wrap gap-2">
-              {task.allowedStatuses.map((s) => (
-                <Button
-                  key={s}
-                  variant={s === 'bajarildi' || s === 'tekshiruvda' ? 'primary' : 'secondary'}
-                  disabled={move.isPending}
-                  onClick={() => move.mutate({ id, status: s }, { onSuccess: () => toast.success(s === 'bajarildi' ? 'Ajoyib! Topshiriq bajarildi' : `"${TASK_COLUMN[s].label}" bosqichiga o'tkazildi`) })}
-                >
-                  {MOVE_LABELS[s]}
-                </Button>
-              ))}
+              {task.allowedStatuses.map((s) =>
+                isReturn(task.status, s) ? (
+                  <Button key={s} variant="secondary" onClick={() => setReturnTo(s)}>
+                    <Undo2 className="size-4" strokeWidth={2} aria-hidden />
+                    {s === 'jarayonda' ? 'Orqaga qaytarish' : MOVE_LABELS[s]}
+                  </Button>
+                ) : (
+                  <Button
+                    key={s}
+                    variant={s === 'bajarildi' ? 'primary' : 'secondary'}
+                    disabled={move.isPending}
+                    onClick={() => move.mutate({ id, status: s }, { onSuccess: () => toast.success(s === 'bajarildi' ? 'Ajoyib! Topshiriq bajarildi' : `"${TASK_COLUMN[s].label}" bosqichiga o'tkazildi`) })}
+                  >
+                    {s === 'bajarildi' && <CircleCheck className="size-4" strokeWidth={2} aria-hidden />}
+                    {MOVE_LABELS[s]}
+                  </Button>
+                ),
+              )}
               {task.canManage && (
                 <>
                   <Button variant="ghost" onClick={() => setEditing(true)}>
@@ -124,6 +136,12 @@ export function TaskDetail({ id, onClose }: { id: string; onClose: () => void })
             </div>
           )}
           <ErrorText>{move.error?.message}</ErrorText>
+          {returnTo && (
+            <div className="mb-4 rounded-2xl bg-tag-orange-bg/50 p-4">
+              <p className="mb-2 text-sm font-semibold text-slate-800">Nima uchun qaytaryapsiz?</p>
+              <ReturnForm taskId={id} to={returnTo} onDone={() => setReturnTo(null)} onCancel={() => setReturnTo(null)} />
+            </div>
+          )}
 
           <div className="border-t border-line pt-4">
             {task.description ? (

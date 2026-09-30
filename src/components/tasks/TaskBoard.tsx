@@ -16,7 +16,9 @@ import {
 import { useMoveTask } from '../../api/hooks'
 import type { Task, TaskStatus } from '../../api/types'
 import { firstName } from '../../lib/humanize'
-import { TASK_COLUMNS } from '../../lib/tasks'
+import { TASK_COLUMNS, isReturn } from '../../lib/tasks'
+import { Modal } from '../Modal'
+import { ReturnForm } from './ReturnForm'
 import { Avatar, Badge } from '../ui'
 import { DeadlineChip } from './DeadlineChip'
 
@@ -116,6 +118,8 @@ function Column({ status, label, tone, dot, bg, tasks, dragging, onOpen }: (type
 export function TaskBoard({ tasks, onOpen }: { tasks: Task[]; onOpen: (id: string) => void }) {
   const move = useMoveTask()
   const [dragging, setDragging] = useState<Task | null>(null)
+  /** Bajarilgan kartochka orqaga surilganda — izoh so'raymiz */
+  const [returning, setReturning] = useState<{ id: string; to: TaskStatus } | null>(null)
   const sensors = useSensors(
     useSensor(MouseSensor, { activationConstraint: { distance: 6 } }),
     useSensor(TouchSensor, { activationConstraint: { delay: 250, tolerance: 8 } }),
@@ -129,14 +133,15 @@ export function TaskBoard({ tasks, onOpen }: { tasks: Task[]; onOpen: (id: strin
   function handleDragEnd(e: DragEndEvent) {
     const target = e.over?.id as TaskStatus | undefined
     if (dragging && target && dragging.allowedStatuses.includes(target)) {
-      move.mutate({ id: dragging.id, status: target })
+      if (isReturn(dragging.status, target)) setReturning({ id: dragging.id, to: target })
+      else move.mutate({ id: dragging.id, status: target })
     }
     setDragging(null)
   }
 
   return (
     <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd} onDragCancel={() => setDragging(null)}>
-      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-3 md:grid-cols-3">
         {TASK_COLUMNS.map((col) => (
           <Column key={col.status} {...col} tasks={tasks.filter((t) => t.status === col.status)} dragging={dragging} onOpen={onOpen} />
         ))}
@@ -148,6 +153,11 @@ export function TaskBoard({ tasks, onOpen }: { tasks: Task[]; onOpen: (id: strin
           </div>
         )}
       </DragOverlay>
+      {returning && (
+        <Modal title="Orqaga qaytarish" onClose={() => setReturning(null)}>
+          <ReturnForm taskId={returning.id} to={returning.to} onDone={() => setReturning(null)} onCancel={() => setReturning(null)} />
+        </Modal>
+      )}
     </DndContext>
   )
 }

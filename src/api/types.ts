@@ -2,7 +2,7 @@ export type Role = 'superadmin' | 'markaz_boshligi' | 'bolim_boshligi' | 'xodim'
 export type VisitorType = 'xodim' | 'talaba' | 'mehmon'
 export type Channel = 'offline' | 'telefon' | 'telegram'
 export type AppealStatus = 'hal_qilindi' | 'hal_qilinmadi'
-export type TaskStatus = 'yangi' | 'jarayonda' | 'tekshiruvda' | 'bajarildi'
+export type TaskStatus = 'yangi' | 'jarayonda' | 'bajarildi'
 export type TaskVisibility = 'public' | 'private'
 
 export interface User {

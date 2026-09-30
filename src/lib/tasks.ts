@@ -5,7 +5,6 @@ import type { Tone } from '../components/ui'
 export const TASK_COLUMNS: Array<{ status: TaskStatus; label: string; tone: Tone; dot: string; bg: string }> = [
   { status: 'yangi', label: 'Yangi', tone: 'slate', dot: 'bg-[#91918e]', bg: 'bg-col-gray' },
   { status: 'jarayonda', label: 'Jarayonda', tone: 'blue', dot: 'bg-[#5b97bd]', bg: 'bg-col-blue' },
-  { status: 'tekshiruvda', label: 'Tekshiruvda', tone: 'amber', dot: 'bg-[#cb912f]', bg: 'bg-col-yellow' },
   { status: 'bajarildi', label: 'Bajarildi', tone: 'green', dot: 'bg-[#6c9b7d]', bg: 'bg-col-green' },
 ]
 
@@ -14,7 +13,6 @@ export const TASK_COLUMN = Object.fromEntries(TASK_COLUMNS.map((c) => [c.status,
 export const TASK_STATUS_LABELS: Record<TaskStatus, string> = {
   yangi: 'Yangi',
   jarayonda: 'Jarayonda',
-  tekshiruvda: 'Tekshiruvda',
   bajarildi: 'Bajarildi',
 }
 
@@ -22,9 +20,11 @@ export const TASK_STATUS_LABELS: Record<TaskStatus, string> = {
 export const MOVE_LABELS: Record<TaskStatus, string> = {
   yangi: 'Yangiga qaytarish',
   jarayonda: 'Ishni boshlash',
-  tekshiruvda: 'Tekshiruvga yuborish',
-  bajarildi: 'Qabul qilish (bajarildi)',
+  bajarildi: 'Bajarildi deb belgilash',
 }
+
+/** Bajarilgan topshiriqni orqaga qaytarish — izoh majburiy, ijrochiga bot orqali xabar boradi */
+export const isReturn = (from: TaskStatus, to: TaskStatus) => from === 'bajarildi' && to !== 'bajarildi'
 
 const TZ = 'Asia/Tashkent'
 

@@ -180,7 +180,8 @@ export function useSaveTask() {
 export function useMoveTask() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: ({ id, status }: { id: string; status: TaskStatus }) => api.patch<Task>(`/tasks/${id}/status`, { status }),
+    mutationFn: ({ id, status, comment }: { id: string; status: TaskStatus; comment?: string }) =>
+      api.patch<Task>(`/tasks/${id}/status`, { status, comment }),
     // Doskada kartochka darhol ko'chadi, server javobidan keyin yangilanadi
     onMutate: async ({ id, status }) => {
       await qc.cancelQueries({ queryKey: ['tasks'] })
