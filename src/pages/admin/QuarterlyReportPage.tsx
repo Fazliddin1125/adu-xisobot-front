@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type TextareaHTMLAttributes } from 'react'
-import { Download, FileText, LoaderCircle, Plus, RefreshCw, Save, ScrollText, Sparkles, Trash2, TriangleAlert } from 'lucide-react'
+import { Download, FileText, LoaderCircle, Lock, Plus, RefreshCw, Save, ScrollText, Sparkles, Trash2, TriangleAlert } from 'lucide-react'
 import {
   downloadReportDocx,
   useAiStatus,
@@ -355,6 +355,16 @@ export function QuarterlyReportPage() {
         }
       />
 
+      {ai.data && !ai.data.canGenerate && (
+        <div className="mb-5 flex items-start gap-3 rounded-2xl bg-slate-100 px-4 py-3 text-sm text-slate-600">
+          <Lock className="mt-0.5 size-4 shrink-0" strokeWidth={2} aria-hidden />
+          <p>
+            <b>Hisobot tayyorlash vaqtincha o‘chirilgan.</b> Superadmin yoqmaguncha yangi hisobot tayyorlab bo‘lmaydi. Tayyor hisobotlarni ko‘rish,
+            tahrirlash va Word'ga yuklash mumkin.
+          </p>
+        </div>
+      )}
+
       {ai.data && !ai.data.enabled && (
         <div className="mb-5 flex items-start gap-3 rounded-2xl bg-tag-yellow-bg/70 px-4 py-3 text-sm text-tag-yellow">
           <TriangleAlert className="mt-0.5 size-4 shrink-0" strokeWidth={2} aria-hidden />
@@ -393,7 +403,7 @@ export function QuarterlyReportPage() {
               yuklab olasiz.
             </p>
             {data?.status === 'failed' && <ErrorText>{data.error}</ErrorText>}
-            <Button className="mt-5" onClick={handleGenerate} disabled={generate.isPending}>
+            <Button className="mt-5" onClick={handleGenerate} disabled={generate.isPending || !ai.data?.canGenerate}>
               <Sparkles className="size-4" strokeWidth={2} aria-hidden />
               Hisobotni tayyorlash
             </Button>
@@ -409,7 +419,7 @@ export function QuarterlyReportPage() {
               {data.generatedAt && <span>tayyorlangan: {relativeTime(data.generatedAt)}</span>}
               {data.status === 'failed' && <Badge tone="red">Oxirgi urinish xato: {data.error}</Badge>}
             </div>
-            <Button variant="ghost" onClick={handleGenerate} disabled={generate.isPending}>
+            <Button variant="ghost" onClick={handleGenerate} disabled={generate.isPending || !ai.data?.canGenerate}>
               <RefreshCw className="size-4" strokeWidth={2} aria-hidden />
               Qayta tayyorlash
             </Button>

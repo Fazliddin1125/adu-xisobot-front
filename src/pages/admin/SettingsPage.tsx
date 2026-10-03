@@ -66,6 +66,26 @@ export function SettingsPage() {
         )}
         <ErrorText>{update.error?.message}</ErrorText>
       </Card>
+
+      <Card title="Choraklik hisobot" className="mt-5">
+        {settings.data && (
+          <div className="flex items-start justify-between gap-4 py-1">
+            <div>
+              <p className="font-medium text-slate-900">Rahbarlar hisobot tayyorlay olsin</p>
+              <p className="mt-0.5 text-sm text-slate-500">
+                Har bir tayyorlash AI'ga so‘rov yuboradi va pullik token sarflaydi. O‘chirilganda markaz va bo‘lim boshliqlari yangi hisobot
+                tayyorlay olmaydi — tayyor hisobotlarni ko‘rish, tahrirlash va Word'ga yuklash ochiq qoladi. Superadmin har doim tayyorlay oladi.
+              </p>
+            </div>
+            <Toggle
+              label="Rahbarlar hisobot tayyorlay olsin"
+              checked={settings.data.reportGenerationEnabled}
+              disabled={update.isPending}
+              onChange={(v) => update.mutate({ reportGenerationEnabled: v })}
+            />
+          </div>
+        )}
+      </Card>
     </>
   )
 }

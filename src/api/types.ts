@@ -25,6 +25,7 @@ export interface Settings {
   appealStatusEnabled: boolean
   visitorTypeEnabled: boolean
   channelEnabled: boolean
+  reportGenerationEnabled: boolean
 }
 
 export interface Appeal {

@@ -47,7 +47,7 @@ export function useAppealFields() {
 }
 
 export function useUpdateSettings() {
-  const invalidate = useInvalidate(['settings'])
+  const invalidate = useInvalidate(['settings', 'ai-status'])
   return useMutation({ mutationFn: (s: Partial<Settings>) => api.patch<Settings>('/admin/settings', s), onSuccess: invalidate })
 }
 
@@ -221,7 +221,7 @@ export interface QuarterKey {
 }
 
 export const useAiStatus = () =>
-  useQuery({ queryKey: ['ai-status'], queryFn: () => api.get<{ enabled: boolean; writer: string }>('/reports/quarterly/ai-status'), staleTime: 5 * 60_000 })
+  useQuery({ queryKey: ['ai-status'], queryFn: () => api.get<{ enabled: boolean; writer: string; canGenerate: boolean }>('/reports/quarterly/ai-status'), staleTime: 5 * 60_000 })
 
 /** Hisobot "tayyorlanmoqda" bo'lsa, har 3 soniyada holatini qayta so'raydi */
 export const useQuarterlyReport = (key: QuarterKey | null) =>
