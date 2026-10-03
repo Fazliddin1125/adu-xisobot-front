@@ -15,6 +15,9 @@ import type {
   TaskInput,
   TaskStatus,
   User,
+  QuarterlyReport,
+  ReportContent,
+  ReportHeader,
 } from './types'
 import { periodQuery, type PeriodValue } from '../lib/period'
 
@@ -208,3 +211,39 @@ export function useAddComment() {
     onSuccess: invalidate,
   })
 }
+
+/* ---------- Choraklik hisobot ---------- */
+
+export interface QuarterKey {
+  departmentId: string
+  year: number
+  quarter: number
+}
+
+export const useAiStatus = () =>
+  useQuery({ queryKey: ['ai-status'], queryFn: () => api.get<{ enabled: boolean; writer: string }>('/reports/quarterly/ai-status'), staleTime: 5 * 60_000 })
+
+/** Hisobot "tayyorlanmoqda" bo'lsa, har 3 soniyada holatini qayta so'raydi */
+export const useQuarterlyReport = (key: QuarterKey | null) =>
+  useQuery({
+    queryKey: ['quarterly-report', key],
+    enabled: !!key,
+    queryFn: () => api.get<QuarterlyReport | null>(`/reports/quarterly?departmentId=${key!.departmentId}&year=${key!.year}&quarter=${key!.quarter}`),
+    refetchInterval: (q) => (q.state.data?.status === 'generating' ? 3000 : false),
+  })
+
+export function useGenerateReport() {
+  const invalidate = useInvalidate(['quarterly-report'])
+  return useMutation({ mutationFn: (key: QuarterKey) => api.post<QuarterlyReport>('/reports/quarterly', key), onSuccess: invalidate })
+}
+
+export function useSaveReport() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: ({ id, ...changes }: { id: string; header?: ReportHeader; content?: ReportContent }) =>
+      api.patch<QuarterlyReport>(`/reports/quarterly/${id}`, changes),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['quarterly-report'] }),
+  })
+}
+
+export const downloadReportDocx = (id: string) => api.download(`/reports/quarterly/${id}/docx`)

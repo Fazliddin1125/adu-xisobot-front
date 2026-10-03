@@ -53,7 +53,10 @@ export const api = {
   },
   async download(path: string): Promise<void> {
     const res = await request(path)
-    const name = /filename="([^"]+)"/.exec(res.headers.get('Content-Disposition') ?? '')?.[1] ?? 'hisobot.xlsx'
+    // filename*=UTF-8''... (o'zbekcha harfli nomlar) yoki oddiy filename="..."
+    const disposition = res.headers.get('Content-Disposition') ?? ''
+    const encoded = /filename\*=UTF-8''([^;]+)/i.exec(disposition)?.[1]
+    const name = encoded ? decodeURIComponent(encoded) : (/filename="([^"]+)"/.exec(disposition)?.[1] ?? 'hisobot')
     const url = URL.createObjectURL(await res.blob())
     const a = Object.assign(document.createElement('a'), { href: url, download: name })
     a.click()

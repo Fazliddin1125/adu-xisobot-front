@@ -13,6 +13,7 @@ import { ReportsPage } from './pages/admin/ReportsPage'
 import { SettingsPage } from './pages/admin/SettingsPage'
 import { StaffDetailPage } from './pages/admin/StaffDetailPage'
 import { StaffListPage } from './pages/admin/StaffListPage'
+import { QuarterlyReportPage } from './pages/admin/QuarterlyReportPage'
 import { UsersPage } from './pages/admin/UsersPage'
 
 /** Eski havolalar (/hisobot/xodim/:id) yangi manzilga yo'naltiriladi */
@@ -39,6 +40,7 @@ export default function App() {
           <>
             <Route path="hisobot" element={<ReportsPage />} />
             <Route path="xodimlar" element={<StaffListPage />} />
+            <Route path="hisobot/chorak" element={<QuarterlyReportPage />} />
             <Route path="xodimlar/:id" element={<StaffDetailPage />} />
             <Route path="hisobot/xodim/:id" element={<LegacyStaffRedirect />} />
           </>

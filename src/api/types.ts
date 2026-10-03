@@ -133,3 +133,49 @@ export interface TaskInput {
   visibility: TaskVisibility
   assigneeIds: string[]
 }
+
+/* ---------- Choraklik hisobot ---------- */
+
+export interface ReportItem {
+  text: string
+  sources: string[]
+}
+
+export interface ReportContent {
+  summary: string
+  months: Array<{ month: number; name: string; items: ReportItem[] }>
+  extra: ReportItem[]
+  conclusion: string[]
+}
+
+export interface ReportHeader {
+  approverTitle: string
+  approverName: string
+  centerName: string
+  departmentName: string
+  signerTitle: string
+  signerName: string
+}
+
+export interface ReportSource {
+  ref: string
+  kind: 'ish' | 'topshiriq'
+  date: string
+  text: string
+  author: string
+}
+
+export interface QuarterlyReport {
+  id: string
+  departmentId: string
+  year: number
+  quarter: number
+  status: 'generating' | 'ready' | 'failed'
+  header: ReportHeader
+  content?: ReportContent
+  sources: ReportSource[]
+  writer?: string
+  error?: string
+  generatedAt?: string
+  updatedAt: string
+}

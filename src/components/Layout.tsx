@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BarChart3, Building2, FileText, House, ListTodo, LogOut, Menu, Settings, Users, UsersRound, type LucideIcon } from 'lucide-react'
+import { BarChart3, Building2, FileText, House, ListTodo, LogOut, Menu, ScrollText, Settings, Users, UsersRound, type LucideIcon } from 'lucide-react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { ROLE_LABELS, isManager, isSuperadmin } from '../lib/roles'
@@ -38,7 +38,11 @@ function Sidebar() {
     { to: '/topshiriqlar', icon: ListTodo, label: 'Topshiriqlar' },
   ]
   if (isManager(user?.role)) {
-    main.push({ to: '/xodimlar', icon: UsersRound, label: 'Xodimlar' }, { to: '/hisobot', icon: BarChart3, label: 'Hisobot' })
+    main.push(
+      { to: '/xodimlar', icon: UsersRound, label: 'Xodimlar' },
+      { to: '/hisobot', icon: BarChart3, label: 'Hisobot', end: true },
+      { to: '/hisobot/chorak', icon: ScrollText, label: 'Choraklik hisobot' },
+    )
   }
   const admin: NavItem[] = isSuperadmin(user?.role)
     ? [
