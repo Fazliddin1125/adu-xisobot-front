@@ -66,8 +66,8 @@ export function ProfilePage() {
             <Field label="Joriy parol">
               <Input type="password" value={currentPassword} onChange={(e) => setCurrent(e.target.value)} autoComplete="current-password" required />
             </Field>
-            <Field label="Yangi parol" hint="kamida 6 belgi">
-              <Input type="password" value={newPassword} onChange={(e) => setNew(e.target.value)} minLength={6} autoComplete="new-password" required />
+            <Field label="Yangi parol" hint="kamida 8 belgi">
+              <Input type="password" value={newPassword} onChange={(e) => setNew(e.target.value)} minLength={8} maxLength={100} autoComplete="new-password" required />
             </Field>
             <Field label="Yangi parolni takrorlang">
               <Input type="password" value={repeat} onChange={(e) => setRepeat(e.target.value)} autoComplete="new-password" required />
@@ -76,7 +76,7 @@ export function ProfilePage() {
             {done && (
               <p className="inline-flex items-center gap-1.5 text-sm font-semibold text-good-ink">
                 <Check className="size-4" strokeWidth={2.5} aria-hidden />
-                Parol o'zgartirildi
+                Parol o'zgartirildi. Boshqa qurilmalardagi sessiyalar yopildi.
               </p>
             )}
             <Button type="submit" disabled={change.isPending}>

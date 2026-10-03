@@ -33,8 +33,8 @@ function UserForm({ user, onDone }: { user?: User; onDone: () => void }) {
       <Field label="Login" hint="lotin harf, raqam, . _ -">
         <Input value={username} onChange={(e) => setUsername(e.target.value)} required minLength={3} autoComplete="off" />
       </Field>
-      <Field label={user ? 'Yangi parol' : 'Parol'} hint={user ? "o'zgartirmasangiz bo'sh qoldiring" : 'kamida 6 belgi'}>
-        <Input type="text" value={password} onChange={(e) => setPassword(e.target.value)} required={!user} minLength={6} autoComplete="off" />
+      <Field label={user ? 'Yangi parol' : 'Parol'} hint={user ? "o'zgartirmasangiz bo'sh qoldiring" : 'kamida 8 belgi'}>
+        <Input type="text" value={password} onChange={(e) => setPassword(e.target.value)} required={!user} minLength={8} maxLength={100} autoComplete="off" />
       </Field>
       <div className="grid gap-4 sm:grid-cols-2">
         <Field label="Rol">

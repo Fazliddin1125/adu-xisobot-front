@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { api } from './client'
+import { api, tokenStore } from './client'
 import type {
   Appeal,
   AppealInput,
@@ -141,9 +141,11 @@ export function useDeleteUser() {
 
 export const useTelegramTest = () => useMutation({ mutationFn: (id: string) => api.post<void>(`/admin/users/${id}/telegram-test`, {}) })
 
+/** Parol almashganda server boshqa qurilmalardagi sessiyalarni bekor qiladi va bu qurilma uchun yangi token beradi */
 export const useChangePassword = () =>
   useMutation({
-    mutationFn: (input: { currentPassword: string; newPassword: string }) => api.patch<void>('/auth/password', input),
+    mutationFn: (input: { currentPassword: string; newPassword: string }) => api.patch<{ token: string }>('/auth/password', input),
+    onSuccess: ({ token }) => tokenStore.set(token),
   })
 
 /* ---------- Topshiriqlar ---------- */
