@@ -28,7 +28,7 @@ export function TasksPage() {
       <PageHeader
         icon={ListTodo}
         title="Topshiriqlar"
-        subtitle="Kartochkani sudrab keyingi bosqichga o'tkazing yoki bosib batafsil oching"
+        subtitle="Kartochkadagi tugma bilan keyingi bosqichga o'tkazing, bosib batafsil oching"
         action={manager && <Button onClick={() => setCreating(true)}>+ Topshiriq berish</Button>}
       />
 

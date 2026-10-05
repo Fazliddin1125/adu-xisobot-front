@@ -9,6 +9,7 @@ import { AppealTable } from '../components/AppealTable'
 import { useToast } from '../components/Toast'
 import { DeadlineChip } from '../components/tasks/DeadlineChip'
 import { CommonTasks } from '../components/tasks/CommonTasks'
+import { QuickStatusButton } from '../components/tasks/QuickStatusButton'
 import { TaskDetail } from '../components/tasks/TaskDetail'
 import { Avatar, Badge, Card, Empty, Loading } from '../components/ui'
 import { deadlineText, firstName, greeting, longDate } from '../lib/humanize'
@@ -82,7 +83,7 @@ export function DashboardPage() {
           {today.isLoading ? (
             <Loading />
           ) : !today.data?.length ? (
-            <Empty icon={Coffee} hint="Biror ish bajarsangiz, chapdagi formadan qayd eting">
+            <Empty icon={Coffee} hint="Biror ish bajarsangiz, «Yangi ish» formasidan qayd eting">
               Bugun hali ish qayd etilmagan
             </Empty>
           ) : (
@@ -111,8 +112,8 @@ export function DashboardPage() {
         ) : (
           <ul className="-mx-2 space-y-1">
             {myActive.slice(0, 6).map((t) => (
-              <li key={t.id}>
-                <button type="button" onClick={() => setOpenTask(t.id)} className="flex w-full items-center gap-3 rounded-xl px-2 py-2.5 text-left transition hover:bg-hover">
+              <li key={t.id} className="flex flex-col gap-2 rounded-xl transition hover:bg-hover sm:flex-row sm:items-center sm:pr-2">
+                <button type="button" onClick={() => setOpenTask(t.id)} className="flex min-w-0 flex-1 items-center gap-3 px-2 py-2.5 text-left">
                   <Avatar name={t.creator.fullName} />
                   <span className="min-w-0 flex-1">
                     <span className="block truncate font-semibold text-slate-800">{t.title}</span>
@@ -123,6 +124,7 @@ export function DashboardPage() {
                   </span>
                   <DeadlineChip deadline={t.deadline} done={false} />
                 </button>
+                <QuickStatusButton task={t} className="mx-2 mb-2 sm:m-0 sm:w-40" />
               </li>
             ))}
           </ul>

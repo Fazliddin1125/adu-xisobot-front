@@ -21,6 +21,7 @@ import { Modal } from '../Modal'
 import { ReturnForm } from './ReturnForm'
 import { Avatar, Badge } from '../ui'
 import { DeadlineChip } from './DeadlineChip'
+import { QuickStatusButton } from './QuickStatusButton'
 
 function CardBody({ task }: { task: Task }) {
   return (
@@ -67,17 +68,22 @@ function TaskCard({ task, onOpen }: { task: Task; onOpen: () => void }) {
   const movable = task.allowedStatuses.length > 0
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({ id: task.id, disabled: !movable })
   return (
-    <button
-      ref={setNodeRef}
-      type="button"
-      {...attributes}
-      {...listeners}
-      onClick={onOpen}
-      aria-roledescription={movable ? 'Suriladigan kartochka' : undefined}
-      className={`${cardCls} transition hover:-translate-y-0.5 hover:shadow-soft ${movable ? 'cursor-grab touch-manipulation' : ''} ${isDragging ? 'opacity-40' : ''}`}
-    >
-      <CardBody task={task} />
-    </button>
+    <div className={`${cardCls} transition hover:-translate-y-0.5 hover:shadow-soft ${isDragging ? 'opacity-40' : ''}`}>
+      {/* Ustki qism: bosilsa ochiladi, ushlab sudraladi */}
+      <button
+        ref={setNodeRef}
+        type="button"
+        {...attributes}
+        {...listeners}
+        onClick={onOpen}
+        aria-roledescription={movable ? 'Suriladigan kartochka' : undefined}
+        className={`block w-full text-left ${movable ? 'cursor-grab touch-manipulation' : ''}`}
+      >
+        <CardBody task={task} />
+      </button>
+      {/* Pastki qism: telefondan bir bosishda keyingi bosqich */}
+      <QuickStatusButton task={task} className="mt-3 w-full" />
+    </div>
   )
 }
 
