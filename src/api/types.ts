@@ -116,6 +116,8 @@ export interface Task {
   commentsCount: number
   canManage: boolean
   allowedStatuses: TaskStatus[]
+  /** Egasi yo'q umumiy ish — qabul qilish mumkin */
+  canClaim: boolean
 }
 
 export interface TaskComment {
@@ -179,4 +181,15 @@ export interface QuarterlyReport {
   error?: string
   generatedAt?: string
   updatedAt: string
+}
+
+/** Xodimning bandligi (faol topshiriqlari) */
+export interface WorkloadRow {
+  userId: string
+  fullName: string
+  role: Role
+  departmentId?: string
+  activeCount: number
+  overdueCount: number
+  tasks: Array<{ id: string; title: string; status: TaskStatus; deadline: string; overdue: boolean }>
 }

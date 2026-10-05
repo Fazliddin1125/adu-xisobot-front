@@ -270,7 +270,7 @@ function ReportEditor({ report }: { report: QuarterlyReport & { content: ReportC
       </Card>
 
       {/* Pastda doim ko'rinadigan amallar paneli */}
-      <div className="fixed inset-x-0 bottom-4 z-30 flex justify-center px-4 md:pl-64">
+      <div className="fixed inset-x-0 bottom-20 z-30 flex justify-center px-4 md:bottom-4 md:pl-64">
         <div className="flex items-center gap-2 rounded-2xl bg-white/95 p-2 shadow-notion backdrop-blur">
           <span className={cx('px-2 text-sm', dirty ? 'font-semibold text-tag-yellow' : 'text-slate-400')}>
             {dirty ? 'Saqlanmagan o‘zgarishlar' : 'Hammasi saqlangan'}

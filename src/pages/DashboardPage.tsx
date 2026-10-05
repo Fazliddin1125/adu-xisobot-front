@@ -8,6 +8,7 @@ import { AppealForm } from '../components/AppealForm'
 import { AppealTable } from '../components/AppealTable'
 import { useToast } from '../components/Toast'
 import { DeadlineChip } from '../components/tasks/DeadlineChip'
+import { CommonTasks } from '../components/tasks/CommonTasks'
 import { TaskDetail } from '../components/tasks/TaskDetail'
 import { Avatar, Badge, Card, Empty, Loading } from '../components/ui'
 import { deadlineText, firstName, greeting, longDate } from '../lib/humanize'
@@ -41,6 +42,7 @@ export function DashboardPage() {
   const summary = useSummary()
   const today = useAppeals('today', { staffId: user?.id })
   const tasks = useTasks({ scope: 'mine' })
+  const common = useTasks({ scope: 'common' })
   const create = useCreateAppeal()
   const [openTask, setOpenTask] = useState<string | null>(null)
   const myActive = (tasks.data ?? []).filter((t) => t.status !== 'bajarildi' && t.assignees.some((a) => a.id === user?.id))
@@ -59,6 +61,8 @@ export function DashboardPage() {
           <HeroStat label="shu oy" value={summary.data?.month} />
         </div>
       </section>
+
+      <CommonTasks tasks={common.data ?? []} onOpen={setOpenTask} compact />
 
       <div className="grid gap-6 lg:grid-cols-5">
         <Card title="Yangi ish" subtitle="Bajarilgan ishni bir necha soniyada qayd eting" className="lg:col-span-2">

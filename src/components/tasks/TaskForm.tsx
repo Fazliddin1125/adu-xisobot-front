@@ -1,19 +1,29 @@
 import { useMemo, useState, type FormEvent } from 'react'
-import { useDepartments, useSaveTask, useUsers } from '../../api/hooks'
-import type { Task, TaskVisibility, User } from '../../api/types'
+import { useDepartments, useSaveTask, useUsers, useWorkload } from '../../api/hooks'
+import type { Task, TaskVisibility, User, WorkloadRow } from '../../api/types'
 import { useAuth } from '../../auth/AuthContext'
 import { ROLE_LABELS } from '../../lib/roles'
 import { toDateInput, todayInput } from '../../lib/tasks'
-import { Avatar, Button, ErrorText, Field, Input, Segmented, Textarea } from '../ui'
+import { Avatar, Badge, Button, ErrorText, Field, Input, Segmented, Textarea } from '../ui'
 
 const VISIBILITY = [
   { value: 'public', label: 'Hamma ko\'rsin' },
   { value: 'private', label: 'Faqat ijrochilar' },
 ] as const satisfies ReadonlyArray<{ value: TaskVisibility; label: string }>
 
+/** Xodim bandligi: bo'sh yoki nechta faol topshiriq (muddati o'tgani qizil) */
+function WorkloadBadge({ row }: { row?: WorkloadRow }) {
+  if (!row) return null
+  if (!row.activeCount) return <Badge tone="green">Bo‘sh</Badge>
+  return <Badge tone={row.overdueCount ? 'red' : 'blue'}>{row.activeCount} ta faol</Badge>
+}
+
 export function TaskForm({ task, onDone }: { task?: Task; onDone: () => void }) {
   const { user: me } = useAuth()
   const users = useUsers()
+  const workload = useWorkload()
+  /** userId → faol topshiriqlar soni (bandlik) */
+  const busy = useMemo(() => new Map((workload.data ?? []).map((w) => [w.userId, w])), [workload.data])
   const departments = useDepartments()
   const save = useSaveTask()
   const [title, setTitle] = useState(task?.title ?? '')
@@ -52,7 +62,7 @@ export function TaskForm({ task, onDone }: { task?: Task; onDone: () => void }) 
     setError('')
     if (title.trim().length < 3) return setError('Sarlavha kamida 3 belgi bo\'lsin')
     if (!deadline) return setError('Muddatni belgilang')
-    if (!assigneeIds.length) return setError('Kamida bitta ijrochi tanlang')
+    // Ijrochi tanlanmasa — egasi yo'q umumiy ish (har kim qabul qila oladi)
     try {
       await save.mutateAsync({ id: task?.id, title: title.trim(), description: description.trim(), deadline, visibility, assigneeIds })
       onDone()
@@ -98,7 +108,8 @@ export function TaskForm({ task, onDone }: { task?: Task; onDone: () => void }) 
                       <input type="checkbox" checked={assigneeIds.includes(u.id)} onChange={() => toggle(u.id)} className="size-4 accent-brand-600" />
                       <Avatar name={u.fullName} size="sm" />
                       <span className="flex-1 text-slate-800">{u.fullName}</span>
-                      <span className="text-xs text-slate-400">{ROLE_LABELS[u.role]}</span>
+                      <span className="hidden text-xs text-slate-400 sm:inline">{ROLE_LABELS[u.role]}</span>
+                      <WorkloadBadge row={busy.get(u.id)} />
                     </label>
                   </li>
                 ))}
@@ -107,12 +118,17 @@ export function TaskForm({ task, onDone }: { task?: Task; onDone: () => void }) 
           ))}
           {!groups.length && <p className="px-3 py-3 text-center text-sm text-slate-400">Xodim topilmadi</p>}
         </div>
+        {!assigneeIds.length && (
+          <p className="mt-2 rounded-xl bg-tag-orange-bg/50 px-3 py-2 text-xs text-tag-orange">
+            Ijrochi tanlanmadi — bu <b>umumiy ish</b> bo‘ladi: hamma ko‘radi va birinchi qabul qilgan xodim bajaradi.
+          </p>
+        )}
       </div>
 
       <ErrorText>{error}</ErrorText>
       <div className="flex gap-2">
         <Button type="submit" disabled={save.isPending}>
-          {task ? 'Saqlash' : 'Topshiriq berish'}
+          {task ? 'Saqlash' : assigneeIds.length ? 'Topshiriq berish' : 'Umumiy ish sifatida berish'}
         </Button>
         <Button variant="secondary" onClick={onDone}>
           Bekor qilish

@@ -4,6 +4,7 @@ import { useMoveTask, useTasks, useUsers } from '../api/hooks'
 import { useAuth } from '../auth/AuthContext'
 import { Modal } from '../components/Modal'
 import { TaskBoard } from '../components/tasks/TaskBoard'
+import { CommonTasks } from '../components/tasks/CommonTasks'
 import { TaskDetail } from '../components/tasks/TaskDetail'
 import { TaskForm } from '../components/tasks/TaskForm'
 import { Button, ErrorText, Loading, PageHeader, Segmented, Select } from '../components/ui'
@@ -19,6 +20,7 @@ export function TasksPage() {
   const [openId, setOpenId] = useState<string | null>(null)
   const users = useUsers(manager)
   const tasks = useTasks({ scope, assigneeId: assigneeId || undefined, includeArchive })
+  const common = useTasks({ scope: 'common' })
   const move = useMoveTask()
 
   return (
@@ -57,7 +59,9 @@ export function TasksPage() {
       </div>
 
       <ErrorText>{move.error?.message}</ErrorText>
-      {tasks.isLoading ? <Loading /> : <TaskBoard tasks={tasks.data ?? []} onOpen={setOpenId} />}
+      <CommonTasks tasks={common.data ?? []} onOpen={setOpenId} />
+      {/* Umumiy ishlar yuqorida alohida — doskada faqat egasi bor topshiriqlar */}
+      {tasks.isLoading ? <Loading /> : <TaskBoard tasks={(tasks.data ?? []).filter((t) => t.assignees.length > 0)} onOpen={setOpenId} />}
 
       {creating && (
         <Modal title="Yangi topshiriq" onClose={() => setCreating(false)}>

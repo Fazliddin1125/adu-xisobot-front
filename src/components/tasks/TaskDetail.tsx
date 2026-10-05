@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
-import { CalendarDays, CircleCheck, CircleDot, Undo2, Clock3, Eye, Lock, Pencil, Pin, Trash2, UserRound, Users } from 'lucide-react'
+import { CalendarDays, CircleCheck, CircleDot, Hand, Undo2, Clock3, Eye, Lock, Pencil, Pin, Trash2, UserRound, Users } from 'lucide-react'
 import type { TaskStatus } from '../../api/types'
-import { useAddComment, useDeleteTask, useMoveTask, useTask } from '../../api/hooks'
+import { useAddComment, useClaimTask, useDeleteTask, useMoveTask, useTask } from '../../api/hooks'
 import { formatDateTime } from '../../lib/period'
 import { firstName, relativeTime } from '../../lib/humanize'
 import { MOVE_LABELS, TASK_COLUMN, formatDeadline, isReturn } from '../../lib/tasks'
@@ -27,6 +27,7 @@ export function TaskDetail({ id, onClose }: { id: string; onClose: () => void })
   const move = useMoveTask()
   const remove = useDeleteTask()
   const addComment = useAddComment()
+  const claim = useClaimTask()
   const toast = useToast()
   const [editing, setEditing] = useState(false)
   /** Bajarilganni qaytarish uchun izoh formasi ochiqmi */
@@ -46,6 +47,15 @@ export function TaskDetail({ id, onClose }: { id: string; onClose: () => void })
     await remove.mutateAsync(task.id)
     toast.success("Topshiriq o'chirildi")
     onClose()
+  }
+
+  async function handleClaim() {
+    try {
+      await claim.mutateAsync(id)
+      toast.success('Ish endi sizning zimmangizda')
+    } catch (e) {
+      toast.error((e as Error).message)
+    }
   }
 
   async function handleComment(e: FormEvent) {
@@ -82,11 +92,15 @@ export function TaskDetail({ id, onClose }: { id: string; onClose: () => void })
               </span>
             </Property>
             <Property icon={Users} label="Ijrochilar">
-              <span className="-mx-1 flex flex-wrap gap-x-1">
-                {task.assignees.map((a) => (
-                  <Person key={a.id} name={a.fullName} />
-                ))}
-              </span>
+              {task.assignees.length ? (
+                <span className="-mx-1 flex flex-wrap gap-x-1">
+                  {task.assignees.map((a) => (
+                    <Person key={a.id} name={a.fullName} />
+                  ))}
+                </span>
+              ) : (
+                <Badge tone="orange">Egasi yo‘q — umumiy ish</Badge>
+              )}
             </Property>
             <Property icon={UserRound} label="Topshiriq bergan">
               <span className="-mx-1">
@@ -100,6 +114,16 @@ export function TaskDetail({ id, onClose }: { id: string; onClose: () => void })
               <span className="text-slate-500">{relativeTime(task.createdAt)}</span>
             </Property>
           </div>
+
+          {task.canClaim && (
+            <div className="mb-4 flex flex-wrap items-center gap-3 rounded-2xl bg-tag-orange-bg/50 p-4">
+              <p className="min-w-0 flex-1 text-sm text-slate-700">Bu ishning egasi yo‘q. Qabul qilsangiz, u sizning zimmangizga o‘tadi va "Jarayonda" bosqichiga ko‘chadi.</p>
+              <Button onClick={handleClaim} disabled={claim.isPending}>
+                <Hand className="size-4" strokeWidth={2} aria-hidden />
+                Ishni qabul qilish
+              </Button>
+            </div>
+          )}
 
           {(task.allowedStatuses.length > 0 || task.canManage) && (
             <div className="mb-4 flex flex-wrap gap-2">

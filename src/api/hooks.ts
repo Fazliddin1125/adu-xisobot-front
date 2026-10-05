@@ -15,6 +15,7 @@ import type {
   TaskInput,
   TaskStatus,
   User,
+  WorkloadRow,
   QuarterlyReport,
   ReportContent,
   ReportHeader,
@@ -151,7 +152,8 @@ export const useChangePassword = () =>
 /* ---------- Topshiriqlar ---------- */
 
 export interface TaskQuery {
-  scope?: 'all' | 'mine'
+  /** common — egasi yo'q umumiy ishlar */
+  scope?: 'all' | 'mine' | 'common'
   assigneeId?: string
   includeArchive?: boolean
 }
@@ -171,7 +173,7 @@ export const useTasks = (q: TaskQuery) =>
 export const useTask = (id: string) =>
   useQuery({ queryKey: ['task', id], queryFn: () => api.get<Task & { comments: TaskComment[] }>(`/tasks/${id}`) })
 
-const TASK_KEYS = ['tasks', 'task']
+const TASK_KEYS = ['tasks', 'task', 'workload']
 
 export function useSaveTask() {
   const invalidate = useInvalidate(TASK_KEYS)
@@ -249,3 +251,17 @@ export function useSaveReport() {
 }
 
 export const downloadReportDocx = (id: string) => api.download(`/reports/quarterly/${id}/docx`)
+
+/* ---------- Umumiy ishlar va bandlik ---------- */
+
+export function useClaimTask() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (id: string) => api.post<Task>(`/tasks/${id}/claim`, {}),
+    onSettled: () => Promise.all(['tasks', 'task', 'workload'].map((k) => qc.invalidateQueries({ queryKey: [k] }))),
+  })
+}
+
+/** Rahbarlar uchun: kim nechta faol topshiriqda band */
+export const useWorkload = (enabled = true) =>
+  useQuery({ queryKey: ['workload'], queryFn: () => api.get<WorkloadRow[]>('/reports/workload'), enabled, refetchInterval: 60_000 })

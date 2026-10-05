@@ -95,6 +95,46 @@ function Sidebar() {
   )
 }
 
+/**
+ * Telefon uchun pastki doimiy menyu (ilovalardagidek): asosiy bo'limlar bir bosishda,
+ * qolganlari "Menyu" orqali yon panelda.
+ */
+function BottomNav({ onMenu }: { onMenu: () => void }) {
+  const { user } = useAuth()
+  const items: NavItem[] = [
+    { to: '/', icon: House, label: 'Bosh sahifa', end: true },
+    { to: '/ishlar', icon: FileText, label: 'Ishlarim' },
+    { to: '/topshiriqlar', icon: ListTodo, label: 'Topshiriqlar' },
+    ...(isManager(user?.role) ? [{ to: '/xodimlar', icon: UsersRound, label: 'Xodimlar' }] : []),
+  ]
+  const tab = 'flex flex-1 flex-col items-center justify-center gap-0.5 py-1.5 text-[11px] font-semibold transition'
+  return (
+    <nav
+      aria-label="Asosiy menyu"
+      className="fixed inset-x-0 bottom-0 z-40 flex border-t border-line bg-white/95 px-1 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden"
+    >
+      {items.map(({ to, icon: Icon, label, end }) => (
+        <NavLink key={to} to={to} end={end} className={({ isActive }) => `${tab} ${isActive ? 'text-brand-600' : 'text-slate-500'}`}>
+          {({ isActive }) => (
+            <>
+              <span className={`flex h-7 w-12 items-center justify-center rounded-full transition ${isActive ? 'bg-brand-50' : ''}`}>
+                <Icon className="size-5" strokeWidth={isActive ? 2.2 : 1.9} aria-hidden />
+              </span>
+              {label}
+            </>
+          )}
+        </NavLink>
+      ))}
+      <button type="button" onClick={onMenu} className={`${tab} text-slate-500`}>
+        <span className="flex h-7 w-12 items-center justify-center rounded-full">
+          <Menu className="size-5" strokeWidth={1.9} aria-hidden />
+        </span>
+        Menyu
+      </button>
+    </nav>
+  )
+}
+
 export function Layout() {
   const [open, setOpen] = useState(false)
   const location = useLocation()
@@ -107,14 +147,12 @@ export function Layout() {
         <Sidebar />
       </aside>
 
-      {/* Telefon: yuqori panel + ochiladigan yon panel */}
-      <header className="sticky top-0 z-40 flex h-12 items-center gap-2 border-b border-line bg-page/95 px-2 backdrop-blur md:hidden">
-        <button onClick={() => setOpen(true)} aria-label="Menyuni ochish" className="flex size-9 items-center justify-center rounded-xl text-slate-600 hover:bg-hover">
-          <Menu className="size-5" strokeWidth={1.9} />
-        </button>
+      {/* Telefon: yuqorida faqat logo; asosiy navigatsiya — pastki panelda */}
+      <header className="sticky top-0 z-40 flex h-12 items-center gap-2 border-b border-line bg-page/95 px-4 backdrop-blur md:hidden">
         <img src="/logo.png" alt="" className="size-7 rounded-full" />
         <span className="text-sm font-semibold text-slate-800">ADU ATM</span>
       </header>
+      <BottomNav onMenu={() => setOpen(true)} />
       {open && (
         <div className="fixed inset-0 z-50 md:hidden" role="dialog" aria-modal="true" aria-label="Menyu">
           <div className="absolute inset-0 bg-[rgba(15,15,15,0.4)]" onClick={() => setOpen(false)} />
@@ -125,7 +163,8 @@ export function Layout() {
       )}
 
       <main className="min-w-0 flex-1">
-        <div className="mx-auto max-w-[1180px] animate-fade-up px-4 pt-6 pb-16 sm:px-8 md:pt-10 lg:px-12">
+        {/* Telefonda pastki panel uchun joy qoldiramiz */}
+        <div className="mx-auto max-w-[1180px] animate-fade-up px-4 pt-6 pb-28 sm:px-8 md:pt-10 md:pb-16 lg:px-12">
           <Outlet />
         </div>
       </main>
