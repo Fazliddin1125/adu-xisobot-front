@@ -14,6 +14,8 @@ const VISIBILITY = [
 /** Xodim bandligi: bo'sh yoki nechta faol topshiriq (muddati o'tgani qizil) */
 function WorkloadBadge({ row }: { row?: WorkloadRow }) {
   if (!row) return null
+  // Ta'tildagiga ham topshiriq berish mumkin — faqat ogohlantiramiz
+  if (row.vacationTo) return <Badge tone="orange">Ta‘tilda</Badge>
   if (!row.activeCount) return <Badge tone="green">Bo‘sh</Badge>
   return <Badge tone={row.overdueCount ? 'red' : 'blue'}>{row.activeCount} ta faol</Badge>
 }

@@ -1,10 +1,10 @@
 import { useState, type FormEvent } from 'react'
-import { CalendarDays, CircleCheck, CircleDot, Hand, Undo2, Clock3, Eye, Lock, Pencil, Pin, Trash2, UserRound, Users } from 'lucide-react'
+import { CalendarDays, CircleCheck, CircleDot, Hand, History, Undo2, Clock3, Eye, Lock, Pencil, Pin, Trash2, UserRound, Users } from 'lucide-react'
 import type { TaskStatus } from '../../api/types'
 import { useAddComment, useClaimTask, useDeleteTask, useMoveTask, useTask } from '../../api/hooks'
 import { formatDateTime } from '../../lib/period'
 import { firstName, relativeTime } from '../../lib/humanize'
-import { MOVE_LABELS, TASK_COLUMN, formatDeadline, isReturn } from '../../lib/tasks'
+import { MOVE_LABELS, TASK_COLUMN, TASK_STATUS_LABELS, formatDeadline, isReturn } from '../../lib/tasks'
 import { ReturnForm } from './ReturnForm'
 import { Modal } from '../Modal'
 import { Avatar, Badge, Button, ErrorText, Loading, Property, Textarea } from '../ui'
@@ -102,6 +102,14 @@ export function TaskDetail({ id, onClose }: { id: string; onClose: () => void })
                 <Badge tone="orange">Egasi yo‘q — umumiy ish</Badge>
               )}
             </Property>
+            {task.completedBy && (
+              <Property icon={CircleCheck} label="Bajardi">
+                <span className="-mx-1 inline-flex flex-wrap items-center gap-x-1">
+                  <Person name={task.completedBy.fullName} />
+                  {task.completedAt && <span className="text-slate-500">{formatDateTime(task.completedAt)}</span>}
+                </span>
+              </Property>
+            )}
             <Property icon={UserRound} label="Topshiriq bergan">
               <span className="-mx-1">
                 <Person name={task.creator.fullName} />
@@ -174,6 +182,27 @@ export function TaskDetail({ id, onClose }: { id: string; onClose: () => void })
               <p className="text-[15px] text-slate-400">Tavsif yo'q</p>
             )}
           </div>
+
+          {task.history.length > 0 && (
+            <section className="mt-6 border-t border-line pt-4">
+              <h2 className="mb-3 flex items-center gap-1.5 text-sm font-semibold text-slate-800">
+                <History className="size-4 text-slate-400" strokeWidth={1.9} aria-hidden />
+                Tarix
+              </h2>
+              <ol className="space-y-2 border-l border-line pl-4">
+                {task.history.map((e, i) => (
+                  <li key={i} className="relative text-sm text-slate-700">
+                    <span className={`absolute top-1.5 -left-[21px] size-2.5 rounded-full ring-2 ring-white ${TASK_COLUMN[e.status].dot}`} aria-hidden />
+                    <span className="font-semibold text-slate-800">{e.by.fullName}</span>{' '}
+                    {i === 0 && e.status === 'yangi' ? 'topshiriqni yaratdi' : <>«{TASK_STATUS_LABELS[e.status]}» ga o‘tkazdi</>}
+                    <span className="ml-1.5 text-xs text-slate-400" title={formatDateTime(e.at)}>
+                      {relativeTime(e.at)}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          )}
 
           <section className="mt-6 border-t border-line pt-4">
             <h2 className="mb-3 text-sm font-semibold text-slate-800">Izohlar {task.comments.length > 0 && <span className="font-normal text-slate-400">{task.comments.length}</span>}</h2>

@@ -12,6 +12,7 @@ import { ROLE_LABELS } from '../../lib/roles'
 /** Bo'sh / Band · N (muddati o'tgan bo'lsa qizil) */
 function WorkloadChip({ row }: { row?: WorkloadRow }) {
   if (!row) return null
+  if (row.vacationTo) return <Badge tone="orange">Ta‘tilda · {row.vacationTo.split('-').reverse().slice(0, 2).join('.')} gacha</Badge>
   if (!row.activeCount) return <Badge tone="green">Bo‘sh</Badge>
   return <Badge tone={row.overdueCount ? 'red' : 'blue'}>Band · {row.activeCount}</Badge>
 }

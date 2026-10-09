@@ -42,7 +42,11 @@ export const api = {
     return (await request(path)).json()
   },
   async post<T>(path: string, body: unknown): Promise<T> {
-    return (await request(path, { method: 'POST', body: JSON.stringify(body) })).json()
+    const res = await request(path, { method: 'POST', body: JSON.stringify(body) })
+    return res.status === 204 ? (undefined as T) : res.json()
+  },
+  async put<T>(path: string, body: unknown): Promise<T> {
+    return (await request(path, { method: 'PUT', body: JSON.stringify(body) })).json()
   },
   async patch<T>(path: string, body: unknown): Promise<T> {
     const res = await request(path, { method: 'PATCH', body: JSON.stringify(body) })

@@ -12,6 +12,9 @@ export interface User {
   role: Role
   departmentId?: string
   telegramId?: string
+  /** Ta'til: "YYYY-MM-DD" (ikkala kun ham kiradi) */
+  vacationFrom?: string
+  vacationTo?: string
   createdAt: string
 }
 
@@ -26,6 +29,8 @@ export interface Settings {
   visitorTypeEnabled: boolean
   channelEnabled: boolean
   reportGenerationEnabled: boolean
+  /** Har kuni 18:00 da bo'lim boshliqlariga Telegram orqali kunlik hisobot */
+  dailyReportEnabled: boolean
 }
 
 export interface Appeal {
@@ -110,6 +115,10 @@ export interface Task {
   assignees: PersonRef[]
   creator: PersonRef
   completedAt?: string
+  /** Kim "Bajarildi"ga o'tkazdi */
+  completedBy?: PersonRef
+  /** Bosqichlar tarixi: kim, qachon */
+  history: Array<{ status: TaskStatus; by: PersonRef; at: string }>
   createdAt: string
   updatedAt: string
   overdue: boolean
@@ -191,5 +200,7 @@ export interface WorkloadRow {
   departmentId?: string
   activeCount: number
   overdueCount: number
+  /** Bugun ta'tilda bo'lsa — ta'tilning oxirgi kuni */
+  vacationTo?: string
   tasks: Array<{ id: string; title: string; status: TaskStatus; deadline: string; overdue: boolean }>
 }

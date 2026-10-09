@@ -6,6 +6,7 @@ import { AppealTable } from '../../components/AppealTable'
 import { useToast } from '../../components/Toast'
 import { PeriodPicker } from '../../components/PeriodPicker'
 import { StatsPanel } from '../../components/StatsPanel'
+import { VacationCard } from '../../components/VacationCard'
 import { Button, Card, Loading, PageHeader } from '../../components/ui'
 import { periodLabel } from '../../lib/period'
 import { ROLE_LABELS } from '../../lib/roles'
@@ -33,6 +34,7 @@ export function StaffDetailPage() {
         action={<PeriodPicker value={period} onChange={setPeriod} />}
       />
       <div className="space-y-6">
+        {user.data && <VacationCard key={user.data.id} user={user.data} />}
         <StatsPanel stats={stats.data} period={period} />
         <Card
           title={`Ishlar${appeals.data ? ` · ${appeals.data.length}` : ''}`}

@@ -142,6 +142,19 @@ export function useDeleteUser() {
 
 export const useTelegramTest = () => useMutation({ mutationFn: (id: string) => api.post<void>(`/admin/users/${id}/telegram-test`, {}) })
 
+/** Rahbarlar: xodimni ta'tilga chiqarish yoki ta'tilni tugatish (null) */
+export function useSetVacation() {
+  const invalidate = useInvalidate(['users', 'workload'])
+  return useMutation({
+    mutationFn: ({ id, vacation }: { id: string; vacation: { from: string; to: string } | null }) =>
+      api.put<User>(`/users/${id}/vacation`, { vacation }),
+    onSuccess: invalidate,
+  })
+}
+
+/** Superadmin: bugungi kunlik hisobotni o'ziga Telegram'da sinov uchun yuborish */
+export const useDailyReportTest = () => useMutation({ mutationFn: () => api.post<void>('/admin/daily-report/test', {}) })
+
 /** Parol almashganda server boshqa qurilmalardagi sessiyalarni bekor qiladi va bu qurilma uchun yangi token beradi */
 export const useChangePassword = () =>
   useMutation({

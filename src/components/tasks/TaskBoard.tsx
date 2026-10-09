@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Lock, MessageCircle } from 'lucide-react'
+import { CircleCheck, Lock, MessageCircle } from 'lucide-react'
 import {
   DndContext,
   DragOverlay,
@@ -35,6 +35,13 @@ function CardBody({ task }: { task: Task }) {
       <div className="mt-2.5">
         <DeadlineChip deadline={task.deadline} done={task.status === 'bajarildi'} />
       </div>
+      {/* Bir nechta ijrochi bo'lsa — aynan kim bajarildi qilgani */}
+      {task.completedBy && (
+        <p className="mt-2 flex items-center gap-1 text-xs font-medium text-ink-green">
+          <CircleCheck className="size-3.5 shrink-0" strokeWidth={2.2} aria-hidden />
+          <span className="truncate">Bajardi: {task.completedBy.fullName}</span>
+        </p>
+      )}
       <div className="mt-3 flex items-center justify-between gap-2">
         <span className="flex -space-x-2">
           {task.assignees.slice(0, 3).map((a) => (

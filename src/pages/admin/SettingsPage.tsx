@@ -1,7 +1,8 @@
-import { Settings as SettingsIcon } from 'lucide-react'
-import { useSettings, useUpdateSettings } from '../../api/hooks'
+import { Send, Settings as SettingsIcon } from 'lucide-react'
+import { useDailyReportTest, useSettings, useUpdateSettings } from '../../api/hooks'
 import type { Settings } from '../../api/types'
-import { Card, ErrorText, Loading, PageHeader } from '../../components/ui'
+import { useToast } from '../../components/Toast'
+import { Button, Card, ErrorText, Loading, PageHeader } from '../../components/ui'
 
 function Toggle({ checked, onChange, disabled, label }: { checked: boolean; onChange: (v: boolean) => void; disabled?: boolean; label: string }) {
   return (
@@ -40,6 +41,8 @@ const FIELD_TOGGLES: Array<{ key: keyof Settings; title: string; description: st
 export function SettingsPage() {
   const settings = useSettings()
   const update = useUpdateSettings()
+  const dailyTest = useDailyReportTest()
+  const toast = useToast()
 
   return (
     <>
@@ -84,6 +87,42 @@ export function SettingsPage() {
               onChange={(v) => update.mutate({ reportGenerationEnabled: v })}
             />
           </div>
+        )}
+      </Card>
+
+      <Card title="Kunlik hisobot (Telegram)" className="mt-5">
+        {settings.data && (
+          <>
+            <div className="flex items-start justify-between gap-4 py-1">
+              <div>
+                <p className="font-medium text-slate-900">Har kuni 18:00 da bo‘lim boshliqlariga yuborilsin</p>
+                <p className="mt-0.5 text-sm text-slate-500">
+                  Bugun berilgan topshiriqlar va ularning holati, kim nechta ish yozgani, bugun bitta ham ish yozmaganlar (ta’tildagilardan
+                  tashqari). Yakshanba kuni yuborilmaydi. Telegram ID kiritilgan bo‘lim boshliqlariga boradi.
+                </p>
+              </div>
+              <Toggle
+                label="Kunlik hisobot"
+                checked={settings.data.dailyReportEnabled}
+                disabled={update.isPending}
+                onChange={(v) => update.mutate({ dailyReportEnabled: v })}
+              />
+            </div>
+            <Button
+              variant="secondary"
+              className="mt-3"
+              disabled={dailyTest.isPending}
+              onClick={() =>
+                dailyTest
+                  .mutateAsync()
+                  .then(() => toast.success('Bugungi hisobot Telegram’ingizga yuborildi'))
+                  .catch((e: Error) => toast.error(e.message))
+              }
+            >
+              <Send className="size-4" strokeWidth={2} aria-hidden />
+              Hozirgi holatni menga yuborish (sinov)
+            </Button>
+          </>
         )}
       </Card>
     </>
