@@ -46,6 +46,24 @@ export interface Penalty {
   createdAt: string
 }
 
+export interface DeliveryResult {
+  userId: string
+  fullName: string
+  ok: boolean
+  /** Yetib bormagan bo'lsa — sababi */
+  reason?: string
+}
+
+/** Bot bir martada yuborgan xabarlar va kim olgani */
+export interface DeliveryLog {
+  id: string
+  kind: 'eslatma' | 'qolda_eslatma' | 'jarima' | 'kunlik_hisobot'
+  title: string
+  byName?: string
+  results: DeliveryResult[]
+  createdAt: string
+}
+
 export interface PenaltySummary {
   total: number
   items: Penalty[]

@@ -17,6 +17,7 @@ import type {
   User,
   WorkloadRow,
   PenaltySummary,
+  DeliveryLog,
   QuarterlyReport,
   ReportContent,
   ReportHeader,
@@ -163,6 +164,16 @@ export const useUserPenalties = (id: string) =>
 /** userId → jami jarima balli (rahbarlar) */
 export const usePenaltyTotals = () =>
   useQuery({ queryKey: ['penalties', 'totals'], queryFn: () => api.get<Record<string, number>>('/reports/penalties') })
+
+/** Rahbar: "qilgan ishlaringizni botga yozing" eslatmasi (hammaga yoki bugun yozmaganlarga) */
+export function useRemind() {
+  const invalidate = useInvalidate(['deliveries'])
+  return useMutation({ mutationFn: (onlyIdle: boolean) => api.post<DeliveryLog | null>('/reports/remind', { onlyIdle }), onSuccess: invalidate })
+}
+
+/** Superadmin: bot xabarlari jurnali */
+export const useDeliveries = () =>
+  useQuery({ queryKey: ['deliveries'], queryFn: () => api.get<DeliveryLog[]>('/admin/deliveries'), refetchInterval: 60_000 })
 
 export function useRemovePenalty() {
   const invalidate = useInvalidate(['penalties'])

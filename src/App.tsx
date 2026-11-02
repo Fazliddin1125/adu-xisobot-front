@@ -11,6 +11,7 @@ import { TasksPage } from './pages/TasksPage'
 import { DepartmentsPage } from './pages/admin/DepartmentsPage'
 import { ReportsPage } from './pages/admin/ReportsPage'
 import { SettingsPage } from './pages/admin/SettingsPage'
+import { DeliveriesPage } from './pages/admin/DeliveriesPage'
 import { StaffDetailPage } from './pages/admin/StaffDetailPage'
 import { StaffListPage } from './pages/admin/StaffListPage'
 import { QuarterlyReportPage } from './pages/admin/QuarterlyReportPage'
@@ -50,6 +51,7 @@ export default function App() {
             <Route path="boshqaruv/foydalanuvchilar" element={<UsersPage />} />
             <Route path="boshqaruv/bolimlar" element={<DepartmentsPage />} />
             <Route path="boshqaruv/sozlamalar" element={<SettingsPage />} />
+            <Route path="boshqaruv/bot-xabarlari" element={<DeliveriesPage />} />
           </>
         )}
         <Route path="*" element={<Navigate to="/" replace />} />

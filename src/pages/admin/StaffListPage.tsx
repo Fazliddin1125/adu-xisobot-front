@@ -5,6 +5,7 @@ import { usePenaltyTotals, useStaffStats, useWorkload } from '../../api/hooks'
 import type { StaffRow, WorkloadRow } from '../../api/types'
 import { useAuth } from '../../auth/AuthContext'
 import { PeriodPicker } from '../../components/PeriodPicker'
+import { RemindButton } from '../../components/RemindButton'
 import { Avatar, Badge, Card, Empty, Input, Loading, PageHeader, Segmented } from '../../components/ui'
 import { periodLabel } from '../../lib/period'
 import { ROLE_LABELS } from '../../lib/roles'
@@ -55,7 +56,12 @@ export function StaffListPage() {
         icon={UsersRound}
         title="Xodimlar"
         subtitle={`Kim bo‘sh, kim band — topshiriq berishdan oldin ko‘ring · ${periodLabel(period)}`}
-        action={<PeriodPicker value={period} onChange={setPeriod} />}
+        action={
+          <div className="flex flex-wrap gap-2">
+            <RemindButton />
+            <PeriodPicker value={period} onChange={setPeriod} />
+          </div>
+        }
       />
 
       <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-center">

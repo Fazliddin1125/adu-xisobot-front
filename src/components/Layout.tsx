@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { BarChart3, Building2, FileText, House, ListTodo, LogOut, Menu, ScrollText, Settings, Users, UsersRound, type LucideIcon } from 'lucide-react'
+import { BarChart3, Building2, FileText, House, ListTodo, LogOut, Menu, ScrollText, Send, Settings, Users, UsersRound, type LucideIcon } from 'lucide-react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { ROLE_LABELS, isManager, isSuperadmin } from '../lib/roles'
@@ -48,6 +48,7 @@ function Sidebar() {
     ? [
         { to: '/boshqaruv/foydalanuvchilar', icon: Users, label: 'Foydalanuvchilar' },
         { to: '/boshqaruv/bolimlar', icon: Building2, label: "Bo'limlar" },
+        { to: '/boshqaruv/bot-xabarlari', icon: Send, label: 'Bot xabarlari' },
         { to: '/boshqaruv/sozlamalar', icon: Settings, label: 'Sozlamalar' },
       ]
     : []
