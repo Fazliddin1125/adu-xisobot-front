@@ -2,6 +2,7 @@ import { Send } from 'lucide-react'
 import { useDeliveries } from '../../api/hooks'
 import type { DeliveryLog } from '../../api/types'
 import { DeliveryResults } from '../../components/DeliveryResults'
+import { RemindButton } from '../../components/RemindButton'
 import { Badge, Card, Empty, Loading, PageHeader } from '../../components/ui'
 import { formatDateTime } from '../../lib/period'
 
@@ -17,11 +18,16 @@ export function DeliveriesPage() {
   const logs = useDeliveries()
   return (
     <>
-      <PageHeader icon={Send} title="Bot xabarlari" subtitle="Bot kimga xabar yubordi va kimga yetib bormadi — oxirgi 90 kun" />
+      <PageHeader
+        icon={Send}
+        title="Bot xabarlari"
+        subtitle="Bot kimga xabar yubordi va kimga yetib bormadi — oxirgi 90 kun"
+        action={<RemindButton />}
+      />
       {logs.isLoading ? (
         <Loading />
       ) : !logs.data?.length ? (
-        <Empty icon={Send}>Hali xabar yuborilmagan</Empty>
+        <Empty icon={Send}>Hali xabar yuborilmagan. «Eslatma yuborish» tugmasini bosing — natija shu yerda ko‘rinadi</Empty>
       ) : (
         <div className="space-y-4">
           {logs.data.map((log) => {
