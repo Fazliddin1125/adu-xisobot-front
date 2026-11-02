@@ -1,7 +1,7 @@
 import { ArrowRight, Coffee, PartyPopper } from 'lucide-react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useAppeals, useCreateAppeal, useSummary, useTasks } from '../api/hooks'
+import { useAppeals, useCreateAppeal, useMyPenalties, useSummary, useTasks } from '../api/hooks'
 import type { Task } from '../api/types'
 import { useAuth } from '../auth/AuthContext'
 import { AppealForm } from '../components/AppealForm'
@@ -45,6 +45,7 @@ export function DashboardPage() {
   const tasks = useTasks({ scope: 'mine' })
   const common = useTasks({ scope: 'common' })
   const create = useCreateAppeal()
+  const penalties = useMyPenalties()
   const [openTask, setOpenTask] = useState<string | null>(null)
   const myActive = (tasks.data ?? []).filter((t) => t.status !== 'bajarildi' && t.assignees.some((a) => a.id === user?.id))
 
@@ -56,6 +57,12 @@ export function DashboardPage() {
           {greeting()}, {user ? firstName(user.fullName) : ''}
         </h1>
         <p className="mt-2 max-w-xl text-[15px] text-slate-600">{daySummary(today.data?.length, myActive)}</p>
+        {(penalties.data?.total ?? 0) < 0 && (
+          <p className="mt-3 inline-flex rounded-xl bg-white/70 px-3 py-1.5 text-sm text-slate-700">
+            Jarima ballaringiz: <b className="mx-1 text-ink-red">{penalties.data!.total}</b>
+            {penalties.data!.items[0] && <>· oxirgisi {penalties.data!.items[0].day.split('-').reverse().join('.')}</>}
+          </p>
+        )}
         <div className="mt-5 flex flex-wrap gap-2.5">
           <HeroStat label="bugun" value={summary.data?.today} />
           <HeroStat label="shu hafta" value={summary.data?.week} />

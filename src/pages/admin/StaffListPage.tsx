@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { ChevronRight, SearchX, UsersRound } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { useStaffStats, useWorkload } from '../../api/hooks'
+import { usePenaltyTotals, useStaffStats, useWorkload } from '../../api/hooks'
 import type { StaffRow, WorkloadRow } from '../../api/types'
 import { useAuth } from '../../auth/AuthContext'
 import { PeriodPicker } from '../../components/PeriodPicker'
@@ -24,6 +24,7 @@ export function StaffListPage() {
   const [search, setSearch] = useState('')
   const staff = useStaffStats(period)
   const workload = useWorkload()
+  const penalties = usePenaltyTotals()
   const [show, setShow] = useState<'all' | 'free' | 'busy'>('all')
   const busy = useMemo(() => new Map((workload.data ?? []).map((w) => [w.userId, w])), [workload.data])
   const freeCount = (workload.data ?? []).filter((w) => w.activeCount === 0).length
@@ -99,6 +100,11 @@ export function StaffListPage() {
                           </span>
                         ))}
                       </span>
+                      {(penalties.data?.[r.staffId] ?? 0) < 0 && (
+                        <span title="Jarima ballari (ish yozilmagan kunlar)">
+                          <Badge tone="red">{penalties.data![r.staffId]}</Badge>
+                        </span>
+                      )}
                       <WorkloadChip row={busy.get(r.staffId)} />
                       <ChevronRight className="size-4 text-slate-300 transition group-hover:translate-x-0.5 group-hover:text-slate-500" aria-hidden />
                     </Link>

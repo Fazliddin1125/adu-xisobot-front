@@ -108,6 +108,22 @@ export function SettingsPage() {
                 onChange={(v) => update.mutate({ dailyReportEnabled: v })}
               />
             </div>
+            <div className="mt-3 flex items-start justify-between gap-4 border-t border-line pt-3">
+              <div>
+                <p className="font-medium text-slate-900">Ish yozmaganlarga eslatma va jarima</p>
+                <p className="mt-0.5 text-sm text-slate-500">
+                  18:00 da bugun ish yozmagan xodimlarga bot eslatma yuboradi. 00:00 gacha ham yozilmasa −1 jarima balli beriladi va ertasi kuni
+                  08:30 da xodimning o‘ziga xabar boradi. Bo‘lim boshliqlari, yakshanba va ta’til kunlari hisobga olinmaydi. Xodimlar ishni botga
+                  oddiy xabar qilib ham yozishi mumkin.
+                </p>
+              </div>
+              <Toggle
+                label="Eslatma va jarima"
+                checked={settings.data.penaltiesEnabled}
+                disabled={update.isPending}
+                onChange={(v) => update.mutate({ penaltiesEnabled: v })}
+              />
+            </div>
             <Button
               variant="secondary"
               className="mt-3"

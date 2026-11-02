@@ -31,6 +31,24 @@ export interface Settings {
   reportGenerationEnabled: boolean
   /** Har kuni 18:00 da bo'lim boshliqlariga Telegram orqali kunlik hisobot */
   dailyReportEnabled: boolean
+  /** 18:00 da eslatma, 00:00 gacha ish yozilmasa -1 jarima balli */
+  penaltiesEnabled: boolean
+}
+
+export interface Penalty {
+  id: string
+  userId: string
+  /** "YYYY-MM-DD" */
+  day: string
+  points: number
+  reason: string
+  notifiedAt?: string
+  createdAt: string
+}
+
+export interface PenaltySummary {
+  total: number
+  items: Penalty[]
 }
 
 export interface Appeal {

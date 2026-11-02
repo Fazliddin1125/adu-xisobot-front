@@ -16,6 +16,7 @@ import type {
   TaskStatus,
   User,
   WorkloadRow,
+  PenaltySummary,
   QuarterlyReport,
   ReportContent,
   ReportHeader,
@@ -150,6 +151,22 @@ export function useSetVacation() {
       api.put<User>(`/users/${id}/vacation`, { vacation }),
     onSuccess: invalidate,
   })
+}
+
+/* ---------- Jarima ballari ---------- */
+
+export const useMyPenalties = () => useQuery({ queryKey: ['penalties', 'me'], queryFn: () => api.get<PenaltySummary>('/penalties/me') })
+
+export const useUserPenalties = (id: string) =>
+  useQuery({ queryKey: ['penalties', id], queryFn: () => api.get<PenaltySummary>(`/users/${id}/penalties`) })
+
+/** userId → jami jarima balli (rahbarlar) */
+export const usePenaltyTotals = () =>
+  useQuery({ queryKey: ['penalties', 'totals'], queryFn: () => api.get<Record<string, number>>('/reports/penalties') })
+
+export function useRemovePenalty() {
+  const invalidate = useInvalidate(['penalties'])
+  return useMutation({ mutationFn: (id: string) => api.delete(`/penalties/${id}`), onSuccess: invalidate })
 }
 
 /** Superadmin: bugungi kunlik hisobotni o'ziga Telegram'da sinov uchun yuborish */

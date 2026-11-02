@@ -7,6 +7,7 @@ import { useToast } from '../../components/Toast'
 import { PeriodPicker } from '../../components/PeriodPicker'
 import { StatsPanel } from '../../components/StatsPanel'
 import { VacationCard } from '../../components/VacationCard'
+import { PenaltyCard } from '../../components/PenaltyCard'
 import { Button, Card, Loading, PageHeader } from '../../components/ui'
 import { periodLabel } from '../../lib/period'
 import { ROLE_LABELS } from '../../lib/roles'
@@ -35,6 +36,7 @@ export function StaffDetailPage() {
       />
       <div className="space-y-6">
         {user.data && <VacationCard key={user.data.id} user={user.data} />}
+        {user.data && <PenaltyCard userId={user.data.id} />}
         <StatsPanel stats={stats.data} period={period} />
         <Card
           title={`Ishlar${appeals.data ? ` · ${appeals.data.length}` : ''}`}
