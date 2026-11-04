@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes, useParams } from 'react-router-dom'
+import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom'
 import { useAuth } from './auth/AuthContext'
 import { Layout } from './components/Layout'
 import { Loading } from './components/ui'
@@ -16,6 +16,8 @@ import { StaffDetailPage } from './pages/admin/StaffDetailPage'
 import { StaffListPage } from './pages/admin/StaffListPage'
 import { QuarterlyReportPage } from './pages/admin/QuarterlyReportPage'
 import { UsersPage } from './pages/admin/UsersPage'
+import { TgWritePage } from './pages/TgWritePage'
+import { RatingPage } from './pages/RatingPage'
 
 /** Eski havolalar (/hisobot/xodim/:id) yangi manzilga yo'naltiriladi */
 function LegacyStaffRedirect() {
@@ -24,10 +26,25 @@ function LegacyStaffRedirect() {
 }
 
 export default function App() {
-  const { user, loading } = useAuth()
+  const { user, loading, telegramError } = useAuth()
+  const location = useLocation()
 
   if (loading) return <Loading />
-  if (!user) return <LoginPage />
+  if (!user) {
+    // Bot ichida (WebApp) login formasi o'rniga sababini ko'rsatamiz
+    if (telegramError)
+      return (
+        <div className="tech-bg flex min-h-dvh items-center justify-center p-6 text-center">
+          <div className="max-w-sm rounded-xl border border-line bg-white p-6 shadow-card">
+            <p className="font-semibold text-slate-900">Kirib bo‘lmadi</p>
+            <p className="mt-2 text-sm text-slate-600">{telegramError}</p>
+          </div>
+        </div>
+      )
+    return <LoginPage />
+  }
+  // Bot ichidagi ixcham sahifa — menyusiz
+  if (location.pathname.startsWith('/tg/')) return <TgWritePage />
 
   return (
     <Routes>
@@ -37,6 +54,7 @@ export default function App() {
         <Route path="murojaatlar" element={<Navigate to="/ishlar" replace />} />
         <Route path="topshiriqlar" element={<TasksPage />} />
         <Route path="profil" element={<ProfilePage />} />
+        <Route path="reyting" element={<RatingPage />} />
         {isManager(user.role) && (
           <>
             <Route path="hisobot" element={<ReportsPage />} />

@@ -39,6 +39,8 @@ export interface Settings {
   reminderText: string
   /** Qattiq eslatma matni */
   strictReminderText: string
+  /** Reyting xodimlarga ko'rinadimi (rahbarlar har doim ko'radi) */
+  ratingVisible: boolean
 }
 
 export interface Penalty {

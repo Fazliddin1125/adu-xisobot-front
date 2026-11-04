@@ -30,9 +30,9 @@ function daySummary(todayCount: number | undefined, tasks: Task[]): string {
 
 function HeroStat({ label, value }: { label: string; value: number | undefined }) {
   return (
-    <div className="rounded-2xl bg-white/70 px-4 py-2.5 backdrop-blur">
-      <p className="tabular text-2xl leading-tight font-extrabold text-slate-800">{value ?? '–'}</p>
-      <p className="text-xs font-semibold text-slate-500">{label}</p>
+    <div className="rounded-lg border sm:min-w-28 border-white/10 bg-white/[0.04] px-4 py-2.5 backdrop-blur">
+      <p className="font-mono text-2xl leading-tight font-semibold text-white">{value ?? '–'}</p>
+      <p className="font-mono text-[11px] tracking-wide text-slate-400 uppercase">{label}</p>
     </div>
   )
 }
@@ -51,19 +51,22 @@ export function DashboardPage() {
 
   return (
     <>
-      <section className="mb-7 overflow-hidden rounded-3xl bg-gradient-to-br from-brand-50 via-[#f6f1ff] to-[#fff1e6] p-6 sm:p-8">
-        <p className="text-sm font-semibold text-slate-500">{longDate()}</p>
-        <h1 className="mt-1 text-[26px] leading-tight font-extrabold tracking-[-0.02em] text-slate-800 sm:text-[32px]">
+      <section className="tech-panel mb-6 rounded-2xl p-5 sm:p-7">
+        <p className="flex items-center gap-2 font-mono text-xs text-slate-400">
+          <span className="live-dot size-1.5 rounded-full bg-emerald-400" aria-hidden />
+          {longDate()}
+        </p>
+        <h1 className="mt-2 text-[24px] leading-tight font-semibold tracking-[-0.02em] text-white sm:text-[30px]">
           {greeting()}, {user ? firstName(user.fullName) : ''}
         </h1>
-        <p className="mt-2 max-w-xl text-[15px] text-slate-600">{daySummary(today.data?.length, myActive)}</p>
+        <p className="mt-2 max-w-xl text-[14px] text-slate-300">{daySummary(today.data?.length, myActive)}</p>
         {(penalties.data?.total ?? 0) < 0 && (
-          <p className="mt-3 inline-flex rounded-xl bg-white/70 px-3 py-1.5 text-sm text-slate-700">
-            Jarima ballaringiz: <b className="mx-1 text-ink-red">{penalties.data!.total}</b>
+          <p className="mt-3 inline-flex rounded-md border border-red-400/30 bg-red-500/10 px-3 py-1.5 text-sm text-red-200">
+            Jarima ballaringiz: <b className="mx-1 font-mono text-red-300">{penalties.data!.total}</b>
             {penalties.data!.items[0] && <>· oxirgisi {penalties.data!.items[0].day.split('-').reverse().join('.')}</>}
           </p>
         )}
-        <div className="mt-5 flex flex-wrap gap-2.5">
+        <div className="mt-5 grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:gap-2.5">
           <HeroStat label="bugun" value={summary.data?.today} />
           <HeroStat label="shu hafta" value={summary.data?.week} />
           <HeroStat label="shu oy" value={summary.data?.month} />
@@ -104,7 +107,7 @@ export function DashboardPage() {
         subtitle={myActive.length ? `${myActive.length} ta faol` : undefined}
         className="mt-6"
         action={
-          <Link to="/topshiriqlar" className="inline-flex items-center gap-1 rounded-xl px-2.5 py-1.5 text-sm font-semibold text-brand-600 hover:bg-brand-50">
+          <Link to="/topshiriqlar" className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[13px] font-medium text-brand-600 hover:bg-brand-50">
             Doskani ochish
             <ArrowRight className="size-4" strokeWidth={2} aria-hidden />
           </Link>

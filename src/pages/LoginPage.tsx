@@ -23,14 +23,14 @@ export function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
-      <div className="w-full max-w-[320px]">
-        <div className="mb-8 text-center">
-          <img src="/logo.png" alt="Andijon davlat universiteti logotipi" className="mx-auto size-24 rounded-full" />
-          <h1 className="mt-4 text-[26px] leading-tight font-bold text-slate-800">ADU ATM bo'limi</h1>
-          <p className="mt-1 text-[15px] text-slate-500">Ishlar va topshiriqlar tizimiga kiring</p>
+    <div className="tech-bg flex min-h-dvh items-center justify-center px-4 py-10">
+      <div className="w-full max-w-[360px]">
+        <div className="mb-6 text-center">
+          <img src="/logo.png" alt="Andijon davlat universiteti logotipi" className="mx-auto size-16 rounded-full ring-1 ring-line" />
+          <h1 className="mt-4 text-[22px] leading-tight font-semibold tracking-tight text-slate-900">ADU ATM bo‘limi</h1>
+          <p className="mt-1 text-[13px] text-slate-500">Ishlar va topshiriqlar tizimiga kiring</p>
         </div>
-        <form onSubmit={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-3.5 rounded-xl bg-white p-5 shadow-card sm:p-6">
           <Field label="Login">
             <Input value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" autoFocus required />
           </Field>
@@ -38,10 +38,11 @@ export function LoginPage() {
             <Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} autoComplete="current-password" required />
           </Field>
           <ErrorText>{error}</ErrorText>
-          <Button type="submit" disabled={busy} className="h-9 w-full">
+          <Button type="submit" disabled={busy} className="w-full">
             {busy ? 'Kirilmoqda…' : 'Kirish'}
           </Button>
         </form>
+        <p className="mt-4 text-center font-mono text-[11px] text-slate-400">Telegram botdagi «Sayt» tugmasi orqali parolsiz kirish mumkin</p>
       </div>
     </div>
   )

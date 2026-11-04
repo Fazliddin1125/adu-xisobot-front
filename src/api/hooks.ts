@@ -163,6 +163,19 @@ export function useSetVacation() {
   })
 }
 
+/* ---------- Reyting ---------- */
+
+export interface RatingRow {
+  staffId: string
+  fullName: string
+  departmentName?: string
+  total: number
+  rank: number
+}
+
+export const useRating = (period: PeriodValue) =>
+  useQuery({ queryKey: ['rating', period], queryFn: () => api.get<{ rows: RatingRow[] }>(`/stats/rating${periodQuery(period)}`) })
+
 /* ---------- Jarima ballari ---------- */
 
 export const useMyPenalties = () => useQuery({ queryKey: ['penalties', 'me'], queryFn: () => api.get<PenaltySummary>('/penalties/me') })

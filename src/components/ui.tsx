@@ -5,28 +5,30 @@ import { initials } from '../lib/tasks'
 
 export const cx = (...c: Array<string | false | undefined | null>) => c.filter(Boolean).join(' ')
 
-/** Oq, yumaloq blok — mayin soya bilan */
+/** Panel: oq fon, 1px chegara; sarlavha bo'lsa — pastki chiziq bilan ajratilgan */
 export function Card({ title, subtitle, action, children, className }: { title?: ReactNode; subtitle?: ReactNode; action?: ReactNode; children: ReactNode; className?: string }) {
+  const hasHeader = !!(title || action)
   return (
-    <section className={cx('min-w-0 rounded-2xl bg-white shadow-soft', className)}>
-      {(title || action) && (
-        <header className="flex flex-wrap items-center justify-between gap-2 px-5 pt-4 pb-1">
-          <div>
-            <h2 className="text-[15px] font-bold text-slate-800">{title}</h2>
-            {subtitle && <p className="text-xs text-slate-500">{subtitle}</p>}
+    <section className={cx('min-w-0 rounded-xl bg-white shadow-card', className)}>
+      {hasHeader && (
+        <header className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-4 py-3 sm:px-5">
+          <div className="min-w-0">
+            <h2 className="text-sm font-semibold text-slate-900">{title}</h2>
+            {subtitle && <p className="mt-0.5 text-xs text-slate-500">{subtitle}</p>}
           </div>
           {action}
         </header>
       )}
-      <div className="px-5 pt-2 pb-5">{children}</div>
+      <div className={cx('px-4 sm:px-5', hasHeader ? 'py-4' : 'py-4 sm:py-5')}>{children}</div>
     </section>
   )
 }
 
 type Variant = 'primary' | 'secondary' | 'danger' | 'ghost'
 const VARIANTS: Record<Variant, string> = {
-  primary: 'bg-brand-600 text-white hover:bg-brand-700 shadow-[0_1px_2px_rgba(62,76,201,0.3)] active:scale-[0.98] disabled:opacity-50',
-  secondary: 'border border-line-strong bg-white text-slate-800 hover:bg-hover disabled:opacity-50',
+  primary:
+    'bg-brand-600 text-white hover:bg-brand-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_1px_2px_rgba(37,99,235,0.35)] active:scale-[0.98] disabled:opacity-50',
+  secondary: 'border border-line-strong bg-white text-slate-800 shadow-[0_1px_2px_rgba(24,24,27,0.05)] hover:bg-slate-50 disabled:opacity-50',
   danger: 'bg-ink-red text-white hover:brightness-95 disabled:opacity-50',
   ghost: 'text-slate-500 hover:bg-hover hover:text-slate-800 disabled:opacity-50',
 }
@@ -36,7 +38,7 @@ export function Button({ variant = 'primary', className, ...props }: ButtonHTMLA
     <button
       type="button"
       className={cx(
-        'inline-flex h-9 items-center justify-center gap-1.5 rounded-xl px-3.5 text-sm font-semibold whitespace-nowrap transition disabled:cursor-not-allowed',
+        'inline-flex h-9 items-center justify-center gap-1.5 rounded-lg px-3.5 text-sm font-medium whitespace-nowrap transition disabled:cursor-not-allowed',
         'focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand-500',
         VARIANTS[variant],
         className,
@@ -49,7 +51,7 @@ export function Button({ variant = 'primary', className, ...props }: ButtonHTMLA
 export function Field({ label, hint, children }: { label: string; hint?: string; children: ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-1.5 flex items-baseline justify-between text-[13px] font-semibold text-slate-700">
+      <span className="mb-1.5 flex items-baseline justify-between text-[13px] font-medium text-slate-700">
         {label}
         {hint && <span className="font-normal text-slate-400">{hint}</span>}
       </span>
@@ -59,8 +61,8 @@ export function Field({ label, hint, children }: { label: string; hint?: string;
 }
 
 const inputCls =
-  'w-full rounded-xl border border-line-strong bg-white px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 transition ' +
-  'focus:border-brand-500 focus:outline-none focus:ring-4 focus:ring-brand-500/15'
+  'w-full rounded-lg border border-line-strong bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 shadow-[0_1px_2px_rgba(24,24,27,0.04)] transition ' +
+  'focus:border-brand-500 focus:outline-none focus:ring-3 focus:ring-brand-500/15'
 
 export const Input = (props: InputHTMLAttributes<HTMLInputElement>) => <input className={inputCls} {...props} />
 export const Textarea = (props: TextareaHTMLAttributes<HTMLTextAreaElement>) => <textarea className={cx(inputCls, 'resize-y')} rows={3} {...props} />
@@ -86,7 +88,7 @@ export function Segmented<T extends string>({
   label?: string
 }) {
   return (
-    <div role="radiogroup" aria-label={label} className="inline-flex w-full flex-wrap gap-1 rounded-xl bg-slate-100 p-1 sm:w-auto">
+    <div role="radiogroup" aria-label={label} className="inline-flex w-full flex-wrap gap-0.5 rounded-lg border border-line bg-slate-100 p-0.5 sm:w-auto">
       {options.map((o) => (
         <button
           key={o.value}
@@ -95,9 +97,9 @@ export function Segmented<T extends string>({
           aria-checked={value === o.value}
           onClick={() => onChange(o.value)}
           className={cx(
-            'flex-1 rounded-lg font-semibold whitespace-nowrap transition sm:flex-none',
-            size === 'sm' ? 'px-2.5 py-0.5 text-xs' : 'px-3.5 py-1.5 text-sm',
-            value === o.value ? 'bg-white text-brand-700 shadow-card' : 'text-slate-500 hover:text-slate-800',
+            'flex-1 rounded-md font-medium whitespace-nowrap transition sm:flex-none',
+            size === 'sm' ? 'px-2.5 py-0.5 text-xs' : 'px-3 py-1 text-[13px]',
+            value === o.value ? 'bg-white text-slate-900 shadow-card' : 'text-slate-500 hover:text-slate-900',
           )}
         >
           {o.label}
@@ -120,7 +122,7 @@ const TONES: Record<Tone, string> = {
 
 /** Yumaloq rangli teg */
 export function Badge({ tone = 'slate', children }: { tone?: Tone; children: ReactNode }) {
-  return <span className={cx('inline-flex h-6 items-center gap-1 rounded-full px-2.5 text-xs font-semibold whitespace-nowrap', TONES[tone])}>{children}</span>
+  return <span className={cx('inline-flex h-[22px] items-center gap-1 rounded-md px-2 text-xs font-medium whitespace-nowrap', TONES[tone])}>{children}</span>
 }
 
 /** Ismga qarab rangi doim bir xil bo'ladigan avatar */
@@ -137,42 +139,47 @@ export function Avatar({ name, size = 'md' }: { name: string; size?: 'sm' | 'md'
 export function ErrorText({ children }: { children?: ReactNode }) {
   if (!children) return null
   return (
-    <p role="alert" className="rounded-xl bg-tag-red-bg/70 px-3.5 py-2.5 text-sm text-tag-red">
+    <p role="alert" className="rounded-lg border border-tag-red/15 bg-tag-red-bg px-3.5 py-2.5 text-sm text-tag-red">
       {children}
     </p>
   )
 }
 
 export function Loading() {
-  return <p className="py-8 text-center text-sm text-slate-400">Yuklanmoqda…</p>
+  return (
+    <p className="flex items-center justify-center gap-2 py-8 text-sm text-slate-400" role="status">
+      <span className="size-3.5 animate-spin rounded-full border-2 border-slate-300 border-t-brand-600" aria-hidden />
+      Yuklanmoqda…
+    </p>
+  )
 }
 
 /** Bo'sh holat: ikonka + iliq matn */
 export function Empty({ icon: Icon = Inbox, children, hint }: { icon?: LucideIcon; children: ReactNode; hint?: ReactNode }) {
   return (
     <div className="flex flex-col items-center py-8 text-center">
-      <span className="mb-3 flex size-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-400" aria-hidden>
-        <Icon className="size-6" strokeWidth={1.75} />
+      <span className="mb-3 flex size-10 items-center justify-center rounded-lg border border-line bg-white text-slate-400 shadow-card" aria-hidden>
+        <Icon className="size-5" strokeWidth={1.75} />
       </span>
-      <p className="text-sm font-semibold text-slate-600">{children}</p>
+      <p className="text-sm font-medium text-slate-700">{children}</p>
       {hint && <p className="mt-0.5 max-w-xs text-xs text-slate-400">{hint}</p>}
     </div>
   )
 }
 
-/** Sahifa sarlavhasi: yumshoq ikonka, sarlavha va qisqa izoh */
+/** Sahifa sarlavhasi: ikonka, sarlavha va qisqa izoh; o'ngda amallar */
 export function PageHeader({ icon: Icon, title, subtitle, action }: { icon?: LucideIcon; title: string; subtitle?: ReactNode; action?: ReactNode }) {
   return (
-    <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
-      <div className="flex min-w-0 items-center gap-3.5">
+    <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+      <div className="flex min-w-0 items-center gap-3">
         {Icon && (
-          <span className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-white text-brand-600 shadow-soft" aria-hidden>
-            <Icon className="size-6" strokeWidth={1.75} />
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-line bg-white text-brand-600 shadow-card" aria-hidden>
+            <Icon className="size-5" strokeWidth={1.9} />
           </span>
         )}
         <div className="min-w-0">
-          <h1 className="text-2xl leading-tight font-extrabold tracking-[-0.02em] text-slate-800 sm:text-[28px]">{title}</h1>
-          {subtitle && <p className="mt-0.5 text-sm text-slate-500">{subtitle}</p>}
+          <h1 className="text-[22px] leading-tight font-semibold tracking-[-0.02em] text-slate-900 sm:text-2xl">{title}</h1>
+          {subtitle && <p className="mt-0.5 text-[13px] text-slate-500">{subtitle}</p>}
         </div>
       </div>
       {action}

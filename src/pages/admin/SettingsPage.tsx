@@ -141,6 +141,26 @@ export function SettingsPage() {
           </>
         )}
       </Card>
+      <Card title="Reyting" className="mt-5">
+        {settings.data && (
+          <div className="flex items-start justify-between gap-4 py-1">
+            <div>
+              <p className="font-medium text-slate-900">Reyting xodimlarga ko‘rinsin</p>
+              <p className="mt-0.5 text-sm text-slate-500">
+                O‘chirilsa, xodimlar menyusida «Reyting» bo‘limi yo‘qoladi va uni ocha olmaydi. Superadmin, markaz va bo‘lim boshliqlari har doim
+                ko‘radi.
+              </p>
+            </div>
+            <Toggle
+              label="Reyting xodimlarga ko‘rinsin"
+              checked={settings.data.ratingVisible}
+              disabled={update.isPending}
+              onChange={(v) => update.mutate({ ratingVisible: v })}
+            />
+          </div>
+        )}
+      </Card>
+
       <ReminderTextsCard />
     </>
   )

@@ -2,10 +2,13 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState, t
 import { useQueryClient } from '@tanstack/react-query'
 import { api, setUnauthorizedHandler, tokenStore } from '../api/client'
 import type { User } from '../api/types'
+import { isTelegramWebApp, telegramWebApp } from '../lib/telegram'
 
 interface AuthState {
   user: User | null
   loading: boolean
+  /** Telegram ichida avtomatik kirish bo'lmadi — sababi (masalan hisob ulanmagan) */
+  telegramError: string | null
   login: (username: string, password: string) => Promise<void>
   logout: () => void
 }
@@ -15,7 +18,8 @@ const AuthContext = createContext<AuthState | null>(null)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const qc = useQueryClient()
   const [user, setUser] = useState<User | null>(null)
-  const [loading, setLoading] = useState(() => !!tokenStore.get())
+  const [loading, setLoading] = useState(() => !!tokenStore.get() || isTelegramWebApp())
+  const [telegramError, setTelegramError] = useState<string | null>(null)
 
   const logout = useCallback(() => {
     tokenStore.clear()
@@ -25,6 +29,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     setUnauthorizedHandler(logout)
+    // Bot ichida (WebApp): Telegram imzosi bilan parolsiz kiramiz
+    if (isTelegramWebApp()) {
+      telegramWebApp()
+        .then((app) => {
+          if (!app?.initData) throw new Error('Telegram ma’lumotlari topilmadi. Botni qayta oching')
+          return api.post<{ token: string; user: User }>('/auth/telegram', { initData: app.initData })
+        })
+        .then((res) => {
+          tokenStore.set(res.token)
+          setUser(res.user)
+        })
+        .catch((e: Error) => setTelegramError(e.message))
+        .finally(() => setLoading(false))
+      return
+    }
     if (!tokenStore.get()) return
     api
       .get<User>('/auth/me')
@@ -39,7 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(res.user)
   }, [])
 
-  const value = useMemo(() => ({ user, loading, login, logout }), [user, loading, login, logout])
+  const value = useMemo(() => ({ user, loading, telegramError, login, logout }), [user, loading, telegramError, login, logout])
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 
