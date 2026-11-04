@@ -39,7 +39,10 @@ export function TaskForm({ task, onDone }: { task?: Task; onDone: () => void }) 
   // Barcha xodimlar bo'limlar bo'yicha guruhlanadi; o'z bo'limim eng tepada, bo'limsizlar oxirida
   const groups = useMemo(() => {
     const q = search.trim().toLowerCase()
-    const list = (users.data ?? []).filter((u) => !q || u.fullName.toLowerCase().includes(q))
+    // Pauzadagilarga topshiriq berilmaydi (oldin biriktirilgan bo'lsa — ko'rinib turadi)
+    const list = (users.data ?? [])
+      .filter((u) => u.status === 'active' || task?.assignees.some((a) => a.id === u.id))
+      .filter((u) => !q || u.fullName.toLowerCase().includes(q))
     const names = new Map((departments.data ?? []).map((d) => [d.id, d.name]))
     const byDept = new Map<string, User[]>()
     for (const u of list) {
@@ -55,7 +58,7 @@ export function TaskForm({ task, onDone }: { task?: Task; onDone: () => void }) 
         members: members.sort((a, b) => a.fullName.localeCompare(b.fullName)),
       }))
       .sort((a, b) => rank(a.key) - rank(b.key) || a.name.localeCompare(b.name))
-  }, [users.data, departments.data, me, search])
+  }, [users.data, departments.data, me, search, task])
 
   const toggle = (id: string) => setAssigneeIds((ids) => (ids.includes(id) ? ids.filter((x) => x !== id) : [...ids, id]))
 

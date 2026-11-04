@@ -10,6 +10,8 @@ export interface User {
   fullName: string
   username: string
   role: Role
+  /** paused — vaqtincha to'xtatilgan; o'chirilganlar ro'yxatda kelmaydi */
+  status: 'active' | 'paused' | 'deleted'
   departmentId?: string
   telegramId?: string
   /** Ta'til: "YYYY-MM-DD" (ikkala kun ham kiradi) */
@@ -33,6 +35,10 @@ export interface Settings {
   dailyReportEnabled: boolean
   /** 18:00 da eslatma, 00:00 gacha ish yozilmasa -1 jarima balli */
   penaltiesEnabled: boolean
+  /** Oddiy eslatma matni. {ism} — xodim ismi, {ball} — jarima ballari */
+  reminderText: string
+  /** Qattiq eslatma matni */
+  strictReminderText: string
 }
 
 export interface Penalty {
@@ -128,6 +134,8 @@ export interface StaffRow extends Counts {
   role: Role
   departmentId?: string
   departmentName?: string
+  /** Faol bo'lmaganlar faqat shu davrda ishi bo'lsa keladi */
+  status: User['status']
 }
 
 export interface DepartmentRow extends Counts {

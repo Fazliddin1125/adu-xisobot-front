@@ -1,7 +1,7 @@
 import { Send, Settings as SettingsIcon } from 'lucide-react'
 import { useDailyReportTest, useSettings, useUpdateSettings } from '../../api/hooks'
-import type { Settings } from '../../api/types'
 import { useToast } from '../../components/Toast'
+import { ReminderTextsCard } from '../../components/ReminderTextsCard'
 import { Button, Card, ErrorText, Loading, PageHeader } from '../../components/ui'
 
 function Toggle({ checked, onChange, disabled, label }: { checked: boolean; onChange: (v: boolean) => void; disabled?: boolean; label: string }) {
@@ -20,7 +20,7 @@ function Toggle({ checked, onChange, disabled, label }: { checked: boolean; onCh
   )
 }
 
-const FIELD_TOGGLES: Array<{ key: keyof Settings; title: string; description: string }> = [
+const FIELD_TOGGLES: Array<{ key: 'visitorTypeEnabled' | 'channelEnabled' | 'appealStatusEnabled'; title: string; description: string }> = [
   {
     key: 'visitorTypeEnabled',
     title: 'Toifa (xodim / talaba / mehmon)',
@@ -141,6 +141,7 @@ export function SettingsPage() {
           </>
         )}
       </Card>
+      <ReminderTextsCard />
     </>
   )
 }

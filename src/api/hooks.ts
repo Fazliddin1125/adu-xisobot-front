@@ -138,8 +138,17 @@ export function useSaveUser() {
 }
 
 export function useDeleteUser() {
-  const invalidate = useInvalidate(['users', 'staff-stats'])
-  return useMutation({ mutationFn: (id: string) => api.delete(`/admin/users/${id}`), onSuccess: invalidate })
+  const invalidate = useInvalidate(['users', 'staff-stats', 'workload'])
+  return useMutation({ mutationFn: (id: string) => api.deleteJson<{ kept: boolean }>(`/admin/users/${id}`), onSuccess: invalidate })
+}
+
+/** Superadmin: pauza yoki qayta faollashtirish */
+export function useSetUserStatus() {
+  const invalidate = useInvalidate(['users', 'staff-stats', 'workload'])
+  return useMutation({
+    mutationFn: ({ id, status }: { id: string; status: 'active' | 'paused' }) => api.put<User>(`/admin/users/${id}/status`, { status }),
+    onSuccess: invalidate,
+  })
 }
 
 export const useTelegramTest = () => useMutation({ mutationFn: (id: string) => api.post<void>(`/admin/users/${id}/telegram-test`, {}) })
@@ -168,7 +177,11 @@ export const usePenaltyTotals = () =>
 /** Rahbar: "qilgan ishlaringizni botga yozing" eslatmasi (hammaga yoki bugun yozmaganlarga) */
 export function useRemind() {
   const invalidate = useInvalidate(['deliveries'])
-  return useMutation({ mutationFn: (onlyIdle: boolean) => api.post<DeliveryLog | null>('/reports/remind', { onlyIdle }), onSuccess: invalidate })
+  return useMutation({
+    mutationFn: (input: { onlyIdle: boolean; kind: 'eslatma' | 'qattiq' | 'xabar'; text: string }) =>
+      api.post<DeliveryLog | null>('/reports/remind', input),
+    onSuccess: invalidate,
+  })
 }
 
 /** Superadmin: bot xabarlari jurnali */

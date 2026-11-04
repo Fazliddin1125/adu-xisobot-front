@@ -8,7 +8,8 @@ import { useToast } from '../../components/Toast'
 import { PeriodPicker } from '../../components/PeriodPicker'
 import { StatsPanel } from '../../components/StatsPanel'
 import { Badge, Button, Card, Empty, Loading, PageHeader, Select } from '../../components/ui'
-import { periodLabel } from '../../lib/period'
+import { isSingleDay, periodLabel } from '../../lib/period'
+import { DayBreakdown } from '../../components/DayBreakdown'
 import { ROLE_LABELS } from '../../lib/roles'
 
 type Row = { key: string; title: ReactNode; subtitle?: ReactNode; onClick?: () => void } & Pick<StaffRow, 'total' | 'offline' | 'online' | 'resolved'>
@@ -115,6 +116,7 @@ export function ReportsPage() {
     title: (
       <>
         {r.fullName} {r.role !== 'xodim' && <Badge tone="amber">{ROLE_LABELS[r.role]}</Badge>}
+        {r.status !== 'active' && <Badge tone="slate">{r.status === 'paused' ? 'Pauzada' : 'O‘chirilgan'}</Badge>}
       </>
     ),
     subtitle: r.departmentName ?? "Bo'limsiz",
@@ -150,6 +152,19 @@ export function ReportsPage() {
       />
       <div className="space-y-6">
         <StatsPanel stats={stats.data} period={period} />
+
+        {/* Bitta kun tanlanganda: kim nechta ish yozdi va nima yozdi */}
+        {isSingleDay(period) && (
+          <Card title={`${periodLabel(period)} · xodimlar va yozgan ishlari`} subtitle="Har bir xodim nechta ish yozgani va matni; yozmaganlar oxirida">
+            {staff.isLoading || appeals.isLoading ? (
+              <Loading />
+            ) : (
+              <DayBreakdown staff={(staff.data?.rows ?? []).filter(
+                  (r) => r.total > 0 || (r.status === 'active' && (r.role === 'xodim' || r.role === 'bolim_boshligi')),
+                )} appeals={appeals.data ?? []} />
+            )}
+          </Card>
+        )}
 
         {!departmentId && deptRows.length > 1 && (
           <Card title="Bo'limlar kesimida">

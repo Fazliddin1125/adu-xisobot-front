@@ -1,4 +1,4 @@
-/** Davr tanlovi: 'today' | 'week' | 'month' | 'YYYY-MM' */
+/** Davr tanlovi: 'today' | 'yesterday' | 'week' | 'month' | 'YYYY-MM' (oy) | 'YYYY-MM-DD' (aniq kun) */
 export type PeriodValue = string
 
 const TZ = 'Asia/Tashkent'
@@ -10,6 +10,7 @@ export function currentMonthKey(): string {
 export function periodQuery(value: PeriodValue, extra: Record<string, string | undefined> = {}): string {
   const params = new URLSearchParams()
   if (/^\d{4}-\d{2}$/.test(value)) params.set('month', value)
+  else if (isDay(value)) params.set('date', value)
   else params.set('period', value)
   for (const [k, v] of Object.entries(extra)) if (v) params.set(k, v)
   return `?${params}`
@@ -22,7 +23,20 @@ export function monthLabel(key: string): string {
   return `${MONTHS[m - 1]} ${y}`
 }
 
+/** Aniq kun tanlanganmi ("YYYY-MM-DD") */
+export const isDay = (value: PeriodValue) => /^\d{4}-\d{2}-\d{2}$/.test(value)
+
+/** Bitta kunlik davr: bugun, kecha yoki kalendardan tanlangan kun */
+export const isSingleDay = (value: PeriodValue) => value === 'today' || value === 'yesterday' || isDay(value)
+
+/** Toshkent bo'yicha bugungi sana "YYYY-MM-DD" */
+export function todayKey(): string {
+  return new Intl.DateTimeFormat('en-CA', { timeZone: TZ, year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date())
+}
+
 export function periodLabel(value: PeriodValue): string {
+  if (isDay(value)) return value.split('-').reverse().join('.')
+  if (value === 'yesterday') return 'Kecha'
   if (value === 'today') return 'Bugun'
   if (value === 'week') return 'Shu hafta'
   if (value === 'month') return 'Shu oy'

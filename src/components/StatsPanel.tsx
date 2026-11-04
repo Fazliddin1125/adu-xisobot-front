@@ -1,3 +1,4 @@
+import { isSingleDay } from '../lib/period'
 import type { ReactNode } from 'react'
 import type { Stats } from '../api/types'
 import { useAppealFields } from '../api/hooks'
@@ -56,7 +57,7 @@ export function StatsPanel({ stats, period }: { stats?: Stats; period: PeriodVal
     )
   }
 
-  const showChart = period !== 'today'
+  const showChart = !isSingleDay(period)
   return (
     <div className="space-y-4">
       <div className={`grid gap-3 ${GRID_COLS[cards.length]}`}>{cards}</div>

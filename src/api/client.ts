@@ -55,6 +55,10 @@ export const api = {
   async delete(path: string): Promise<void> {
     await request(path, { method: 'DELETE' })
   },
+  async deleteJson<T>(path: string): Promise<T> {
+    const res = await request(path, { method: 'DELETE' })
+    return res.status === 204 ? (undefined as T) : res.json()
+  },
   async download(path: string): Promise<void> {
     const res = await request(path)
     // filename*=UTF-8''... (o'zbekcha harfli nomlar) yoki oddiy filename="..."

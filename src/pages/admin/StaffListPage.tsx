@@ -35,6 +35,7 @@ export function StaffListPage() {
     const q = search.trim().toLowerCase()
     const active = (id: string) => busy.get(id)?.activeCount ?? 0
     const rows = (staff.data?.rows ?? [])
+      .filter((r) => r.status === 'active')
       .filter((r) => !q || r.fullName.toLowerCase().includes(q))
       .filter((r) => show === 'all' || (show === 'free' ? active(r.staffId) === 0 : active(r.staffId) > 0))
     const byDept = new Map<string, { name: string; mine: boolean; rows: StaffRow[] }>()

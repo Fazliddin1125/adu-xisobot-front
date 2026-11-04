@@ -1,7 +1,7 @@
 import { Check, Users } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { useDeleteUser, useDepartments, useSaveUser, useTelegramTest, useUsers } from '../../api/hooks'
+import { useDeleteUser, useDepartments, useSaveUser, useSetUserStatus, useTelegramTest, useUsers } from '../../api/hooks'
 import type { Role, User } from '../../api/types'
 import { useAuth } from '../../auth/AuthContext'
 import { Modal } from '../../components/Modal'
@@ -83,15 +83,33 @@ export function UsersPage() {
   const departments = useDepartments()
   const remove = useDeleteUser()
   const telegramTest = useTelegramTest()
+  const setStatus = useSetUserStatus()
   const toast = useToast()
   const [editing, setEditing] = useState<User | 'new' | null>(null)
   const deptName = (id?: string) => departments.data?.find((d) => d.id === id)?.name ?? "Bo'limsiz"
 
   async function handleDelete(u: User) {
-    if (!confirm(`${u.fullName} ni o'chirasizmi?`)) return
+    if (
+      !confirm(
+        `${u.fullName} ni o'chirasizmi?\n\nU tizimga kira olmaydi va ro'yxatlar, hisobotlar, bot xabarlarida ko'rinmaydi. Yozgan ishlari va topshiriqlari tarixda ismi bilan qoladi. Login va Telegram ID bo'shaydi.\n\nQaytarish mumkin emas — vaqtincha bo'lsa «Pauza»ni tanlang.`,
+      )
+    )
+      return
     try {
-      await remove.mutateAsync(u.id)
-      toast.success(`${u.fullName} o'chirildi`)
+      const { kept } = await remove.mutateAsync(u.id)
+      toast.success(kept ? `${u.fullName} o'chirildi — yozgan ishlari saqlanib qoldi` : `${u.fullName} o'chirildi`)
+    } catch (e) {
+      toast.error((e as Error).message)
+    }
+  }
+
+  async function handleStatus(u: User) {
+    const pausing = u.status === 'active'
+    if (pausing && !confirm(`${u.fullName} ni pauzaga olasizmi?\n\nU vaqtincha tizimga kira olmaydi, ro'yxat, hisobot va bot xabarlarida ko'rinmaydi, jarima ham berilmaydi. Istalgan payt «Faollashtirish» bilan qaytariladi.`))
+      return
+    try {
+      await setStatus.mutateAsync({ id: u.id, status: pausing ? 'paused' : 'active' })
+      toast.success(pausing ? `${u.fullName} pauzaga olindi` : `${u.fullName} qayta faollashtirildi`)
     } catch (e) {
       toast.error((e as Error).message)
     }
@@ -115,12 +133,13 @@ export function UsersPage() {
         ) : (
           <ul className="-my-2 divide-y divide-line">
             {users.data?.map((u) => (
-              <li key={u.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
+              <li key={u.id} className={`flex flex-wrap items-center justify-between gap-3 py-3 ${u.status === 'paused' ? 'opacity-60' : ''}`}>
                 <div>
                   <Link to={`/xodimlar/${u.id}`} className="font-medium text-slate-900 hover:text-brand-600">
                     {u.fullName}
                   </Link>{' '}
-                  <Badge tone={u.role === 'xodim' ? 'slate' : 'amber'}>{ROLE_LABELS[u.role]}</Badge>
+                  <Badge tone={u.role === 'xodim' ? 'slate' : 'amber'}>{ROLE_LABELS[u.role]}</Badge>{' '}
+                  {u.status === 'paused' && <Badge tone="orange">Pauzada</Badge>}
                   <p className="text-xs text-slate-500">
                     @{u.username} · {deptName(u.departmentId)} ·{' '}
                     {u.telegramId ? <span className="inline-flex items-center gap-0.5 text-good-ink">
@@ -137,6 +156,11 @@ export function UsersPage() {
                   <Button variant="ghost" className="px-2 py-1 text-xs" onClick={() => setEditing(u)}>
                     Tahrirlash
                   </Button>
+                  {u.id !== me?.id && (
+                    <Button variant="ghost" className="px-2 py-1 text-xs" disabled={setStatus.isPending} onClick={() => handleStatus(u)}>
+                      {u.status === 'paused' ? 'Faollashtirish' : 'Pauza'}
+                    </Button>
+                  )}
                   {u.id !== me?.id && (
                     <Button variant="ghost" className="px-2 py-1 text-xs text-red-600 hover:bg-red-50" onClick={() => handleDelete(u)}>
                       O'chirish
