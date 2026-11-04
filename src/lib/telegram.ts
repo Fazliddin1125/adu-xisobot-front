@@ -1,3 +1,5 @@
+import { setTelegramScheme } from './theme'
+
 /**
  * Telegram WebApp (sayt bot ichida ochilganda).
  * Telegram manzilga #tgWebAppData=... qo'shadi — shundagina rasmiy skriptni yuklaymiz,
@@ -5,6 +7,8 @@
  */
 interface TelegramWebApp {
   initData: string
+  colorScheme?: 'light' | 'dark'
+  onEvent?(event: 'themeChanged', cb: () => void): void
   ready(): void
   expand(): void
   close(): void
@@ -19,8 +23,11 @@ declare global {
   }
 }
 
-/** Sayt Telegram ichida ochilganmi (birinchi yuklanishda hash'da tgWebAppData bo'ladi) */
-const launchedInTelegram = typeof window !== 'undefined' && /tgWebAppData=/.test(window.location.hash)
+/**
+ * Sayt Telegram ichida ochilganmi: birinchi yuklanishda hash'da tgWebApp… parametrlari bo'ladi.
+ * (Pastki menyu tugmasidan ochilganda tgWebAppData — foydalanuvchi ma'lumoti — bo'lmaydi, lekin tgWebAppVersion bor)
+ */
+const launchedInTelegram = typeof window !== 'undefined' && /tgWebApp/.test(window.location.hash)
 // Hash keyingi navigatsiyada yo'qoladi — sessiya davomida eslab qolamiz
 if (launchedInTelegram) {
   try {
@@ -52,6 +59,9 @@ export function telegramWebApp(): Promise<TelegramWebApp | null> {
       const app = window.Telegram?.WebApp ?? null
       app?.ready()
       app?.expand()
+      // "Tizim" mavzusida Telegram'ning yorug'/qorong'i rejimiga ergashamiz
+      setTelegramScheme(app?.colorScheme)
+      app?.onEvent?.('themeChanged', () => setTelegramScheme(window.Telegram?.WebApp?.colorScheme))
       resolve(app)
     }
     script.onerror = () => resolve(null)

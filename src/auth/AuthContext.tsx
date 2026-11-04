@@ -33,7 +33,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (isTelegramWebApp()) {
       telegramWebApp()
         .then((app) => {
-          if (!app?.initData) throw new Error('Telegram ma’lumotlari topilmadi. Botni qayta oching')
+          if (!app?.initData)
+            throw new Error('Bu tugma eskirgan. Botga /start yuboring, so‘ng «✍️ Ish yozish» tugmasini bosing — forma o‘zi ochiladi.')
           return api.post<{ token: string; user: User }>('/auth/telegram', { initData: app.initData })
         })
         .then((res) => {

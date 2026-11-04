@@ -6,6 +6,10 @@ import { AuthProvider } from './auth/AuthContext'
 import { ToastProvider } from './components/Toast'
 import App from './App'
 import './index.css'
+import { initTheme } from './lib/theme'
+
+// Mavzuni birinchi chizishdan oldin qo'llaymiz (oq "miltillash" bo'lmasin)
+initTheme()
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: true, staleTime: 15_000 } },

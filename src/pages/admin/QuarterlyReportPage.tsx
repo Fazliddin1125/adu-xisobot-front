@@ -41,7 +41,7 @@ function AutoTextarea({ className, ...props }: TextareaHTMLAttributes<HTMLTextAr
       rows={1}
       className={cx(
         'w-full resize-none overflow-hidden rounded-xl border border-transparent bg-transparent px-2.5 py-1.5 text-[15px] leading-relaxed text-slate-800 transition',
-        'hover:border-line-strong focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-4 focus:ring-brand-500/15',
+        'hover:border-line-strong focus:border-brand-500 focus:bg-surface focus:outline-none focus:ring-4 focus:ring-brand-500/15',
         className,
       )}
       {...props}
@@ -271,7 +271,7 @@ function ReportEditor({ report }: { report: QuarterlyReport & { content: ReportC
 
       {/* Pastda doim ko'rinadigan amallar paneli */}
       <div className="fixed inset-x-0 bottom-20 z-30 flex justify-center px-4 md:bottom-4 md:pl-64">
-        <div className="flex items-center gap-2 rounded-2xl bg-white/95 p-2 shadow-notion backdrop-blur">
+        <div className="flex items-center gap-2 rounded-2xl bg-surface/95 p-2 shadow-notion backdrop-blur">
           <span className={cx('px-2 text-sm', dirty ? 'font-semibold text-tag-yellow' : 'text-slate-400')}>
             {dirty ? 'Saqlanmagan o‘zgarishlar' : 'Hammasi saqlangan'}
           </span>

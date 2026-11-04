@@ -44,7 +44,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         {items.map((t) => {
           const Icon = ICONS[t.kind]
           return (
-          <div key={t.id} role={t.kind === 'error' ? 'alert' : 'status'} className="pointer-events-auto flex max-w-md animate-toast-in items-center gap-3 rounded-2xl bg-white py-2.5 pr-4 pl-2.5 text-sm text-slate-800 shadow-notion">
+          <div key={t.id} role={t.kind === 'error' ? 'alert' : 'status'} className="pointer-events-auto flex max-w-md animate-toast-in items-center gap-3 rounded-2xl bg-surface py-2.5 pr-4 pl-2.5 text-sm text-slate-800 shadow-notion">
             <span className={`flex size-7 shrink-0 items-center justify-center rounded-full ${STYLES[t.kind]}`}>
               <Icon className="size-4" strokeWidth={2.2} aria-hidden />
             </span>

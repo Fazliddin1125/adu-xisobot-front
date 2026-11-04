@@ -45,12 +45,12 @@ function CardBody({ task }: { task: Task }) {
       <div className="mt-3 flex items-center justify-between gap-2">
         <span className="flex -space-x-2">
           {task.assignees.slice(0, 3).map((a) => (
-            <span key={a.id} className="rounded-full ring-2 ring-white">
+            <span key={a.id} className="rounded-full ring-2 ring-surface">
               <Avatar name={a.fullName} size="sm" />
             </span>
           ))}
           {task.assignees.length > 3 && (
-            <span className="flex size-6 items-center justify-center rounded-full bg-tag-gray-bg text-[10px] font-bold text-tag-gray ring-2 ring-white">
+            <span className="flex size-6 items-center justify-center rounded-full bg-tag-gray-bg text-[10px] font-bold text-tag-gray ring-2 ring-surface">
               +{task.assignees.length - 3}
             </span>
           )}
@@ -69,7 +69,7 @@ function CardBody({ task }: { task: Task }) {
   )
 }
 
-const cardCls = 'w-full rounded-2xl bg-white p-3.5 text-left shadow-card'
+const cardCls = 'w-full rounded-2xl bg-surface p-3.5 text-left shadow-card'
 
 function TaskCard({ task, onOpen }: { task: Task; onOpen: () => void }) {
   const movable = task.allowedStatuses.length > 0

@@ -192,7 +192,7 @@ export function TaskDetail({ id, onClose }: { id: string; onClose: () => void })
               <ol className="space-y-2 border-l border-line pl-4">
                 {task.history.map((e, i) => (
                   <li key={i} className="relative text-sm text-slate-700">
-                    <span className={`absolute top-1.5 -left-[21px] size-2.5 rounded-full ring-2 ring-white ${TASK_COLUMN[e.status].dot}`} aria-hidden />
+                    <span className={`absolute top-1.5 -left-[21px] size-2.5 rounded-full ring-2 ring-surface ${TASK_COLUMN[e.status].dot}`} aria-hidden />
                     <span className="font-semibold text-slate-800">{e.by.fullName}</span>{' '}
                     {i === 0 && e.status === 'yangi' ? 'topshiriqni yaratdi' : <>«{TASK_STATUS_LABELS[e.status]}» ga o‘tkazdi</>}
                     <span className="ml-1.5 text-xs text-slate-400" title={formatDateTime(e.at)}>

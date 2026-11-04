@@ -6,6 +6,7 @@ import { useSettings } from '../api/hooks'
 import { ROLE_LABELS, isManager, isSuperadmin } from '../lib/roles'
 import { firstName } from '../lib/humanize'
 import { Avatar } from './ui'
+import { ThemeButton, ThemeToggle } from './ThemeToggle'
 
 interface NavItem {
   to: string
@@ -97,7 +98,8 @@ function Sidebar() {
       </nav>
 
       <div className="border-t border-line p-3">
-        <div>
+        <ThemeToggle />
+        <div className="mt-2">
           <NavLink to="/profil" className="flex items-center gap-2.5 rounded-md p-1.5 hover:bg-hover">
             {user && <Avatar name={user.fullName} />}
             <span className="min-w-0 leading-tight">
@@ -136,7 +138,7 @@ function BottomNav({ onMenu }: { onMenu: () => void }) {
   return (
     <nav
       aria-label="Asosiy menyu"
-      className="fixed inset-x-0 bottom-0 z-40 flex border-t border-line bg-white/90 px-1 pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:hidden"
+      className="fixed inset-x-0 bottom-0 z-40 flex border-t border-line bg-surface/90 px-1 pb-[env(safe-area-inset-bottom)] backdrop-blur-md md:hidden"
     >
       {items.map(({ to, icon: Icon, label, end }) => (
         <NavLink key={to} to={to} end={end} className={({ isActive }) => `${tab} ${isActive ? 'text-brand-600' : 'text-slate-500'}`}>
@@ -173,15 +175,16 @@ export function Layout() {
       </aside>
 
       {/* Telefon: yuqorida faqat logo; asosiy navigatsiya — pastki panelda */}
-      <header className="sticky top-0 z-40 flex h-12 items-center gap-2 border-b border-line bg-white/90 px-4 backdrop-blur-md md:hidden">
+      <header className="sticky top-0 z-40 flex h-12 items-center gap-2 border-b border-line bg-surface/90 px-4 backdrop-blur-md md:hidden">
         <img src="/logo.png" alt="" className="size-7 rounded-full ring-1 ring-line" />
         <span className="text-sm font-semibold text-slate-900">ADU ATM</span>
+        <ThemeButton className="ml-auto" />
       </header>
       <BottomNav onMenu={() => setOpen(true)} />
       {open && (
         <div className="fixed inset-0 z-50 md:hidden" role="dialog" aria-modal="true" aria-label="Menyu">
           <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[2px]" onClick={() => setOpen(false)} />
-          <aside className="absolute inset-y-0 left-0 w-72 animate-fade-up bg-white shadow-notion">
+          <aside className="absolute inset-y-0 left-0 w-72 animate-fade-up bg-surface shadow-notion">
             <Sidebar />
           </aside>
         </div>

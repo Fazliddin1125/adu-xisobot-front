@@ -30,7 +30,7 @@ export function LoginPage() {
           <h1 className="mt-4 text-[22px] leading-tight font-semibold tracking-tight text-slate-900">ADU ATM bo‘limi</h1>
           <p className="mt-1 text-[13px] text-slate-500">Ishlar va topshiriqlar tizimiga kiring</p>
         </div>
-        <form onSubmit={handleSubmit} className="space-y-3.5 rounded-xl bg-white p-5 shadow-card sm:p-6">
+        <form onSubmit={handleSubmit} className="space-y-3.5 rounded-xl bg-surface p-5 shadow-card sm:p-6">
           <Field label="Login">
             <Input value={username} onChange={(e) => setUsername(e.target.value)} autoComplete="username" autoFocus required />
           </Field>
@@ -42,7 +42,7 @@ export function LoginPage() {
             {busy ? 'Kirilmoqda…' : 'Kirish'}
           </Button>
         </form>
-        <p className="mt-4 text-center font-mono text-[11px] text-slate-400">Telegram botdagi «Sayt» tugmasi orqali parolsiz kirish mumkin</p>
+        <p className="mt-4 text-center font-mono text-[11px] text-slate-400">Telegram botdagi «Ish yozish» tugmasi orqali parolsiz kirish mumkin</p>
       </div>
     </div>
   )

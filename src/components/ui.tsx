@@ -9,7 +9,7 @@ export const cx = (...c: Array<string | false | undefined | null>) => c.filter(B
 export function Card({ title, subtitle, action, children, className }: { title?: ReactNode; subtitle?: ReactNode; action?: ReactNode; children: ReactNode; className?: string }) {
   const hasHeader = !!(title || action)
   return (
-    <section className={cx('min-w-0 rounded-xl bg-white shadow-card', className)}>
+    <section className={cx('min-w-0 rounded-xl bg-surface shadow-card', className)}>
       {hasHeader && (
         <header className="flex flex-wrap items-center justify-between gap-2 border-b border-line px-4 py-3 sm:px-5">
           <div className="min-w-0">
@@ -28,7 +28,7 @@ type Variant = 'primary' | 'secondary' | 'danger' | 'ghost'
 const VARIANTS: Record<Variant, string> = {
   primary:
     'bg-brand-600 text-white hover:bg-brand-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.18),0_1px_2px_rgba(37,99,235,0.35)] active:scale-[0.98] disabled:opacity-50',
-  secondary: 'border border-line-strong bg-white text-slate-800 shadow-[0_1px_2px_rgba(24,24,27,0.05)] hover:bg-slate-50 disabled:opacity-50',
+  secondary: 'border border-line-strong bg-surface text-slate-800 shadow-[0_1px_2px_rgba(24,24,27,0.05)] hover:bg-slate-50 disabled:opacity-50',
   danger: 'bg-ink-red text-white hover:brightness-95 disabled:opacity-50',
   ghost: 'text-slate-500 hover:bg-hover hover:text-slate-800 disabled:opacity-50',
 }
@@ -61,7 +61,7 @@ export function Field({ label, hint, children }: { label: string; hint?: string;
 }
 
 const inputCls =
-  'w-full rounded-lg border border-line-strong bg-white px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 shadow-[0_1px_2px_rgba(24,24,27,0.04)] transition ' +
+  'w-full rounded-lg border border-line-strong bg-surface px-3 py-2 text-sm text-slate-900 placeholder:text-slate-400 shadow-[0_1px_2px_rgba(24,24,27,0.04)] transition ' +
   'focus:border-brand-500 focus:outline-none focus:ring-3 focus:ring-brand-500/15'
 
 export const Input = (props: InputHTMLAttributes<HTMLInputElement>) => <input className={inputCls} {...props} />
@@ -99,7 +99,7 @@ export function Segmented<T extends string>({
           className={cx(
             'flex-1 rounded-md font-medium whitespace-nowrap transition sm:flex-none',
             size === 'sm' ? 'px-2.5 py-0.5 text-xs' : 'px-3 py-1 text-[13px]',
-            value === o.value ? 'bg-white text-slate-900 shadow-card' : 'text-slate-500 hover:text-slate-900',
+            value === o.value ? 'bg-surface text-slate-900 shadow-card' : 'text-slate-500 hover:text-slate-900',
           )}
         >
           {o.label}
@@ -158,7 +158,7 @@ export function Loading() {
 export function Empty({ icon: Icon = Inbox, children, hint }: { icon?: LucideIcon; children: ReactNode; hint?: ReactNode }) {
   return (
     <div className="flex flex-col items-center py-8 text-center">
-      <span className="mb-3 flex size-10 items-center justify-center rounded-lg border border-line bg-white text-slate-400 shadow-card" aria-hidden>
+      <span className="mb-3 flex size-10 items-center justify-center rounded-lg border border-line bg-surface text-slate-400 shadow-card" aria-hidden>
         <Icon className="size-5" strokeWidth={1.75} />
       </span>
       <p className="text-sm font-medium text-slate-700">{children}</p>
@@ -173,7 +173,7 @@ export function PageHeader({ icon: Icon, title, subtitle, action }: { icon?: Luc
     <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
       <div className="flex min-w-0 items-center gap-3">
         {Icon && (
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-line bg-white text-brand-600 shadow-card" aria-hidden>
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-lg border border-line bg-surface text-brand-600 shadow-card" aria-hidden>
             <Icon className="size-5" strokeWidth={1.9} />
           </span>
         )}

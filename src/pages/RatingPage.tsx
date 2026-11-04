@@ -24,7 +24,7 @@ function Podium({ rows, meId }: { rows: RatingRow[]; meId?: string }) {
         return (
           <div
             key={r.staffId}
-            className={`flex flex-col items-center rounded-xl border bg-white px-2 pb-4 text-center shadow-card ${first ? 'pt-6' : 'pt-4'} ${
+            className={`flex flex-col items-center rounded-xl border bg-surface px-2 pb-4 text-center shadow-card ${first ? 'pt-6' : 'pt-4'} ${
               r.staffId === meId ? 'border-brand-500' : 'border-line'
             }`}
           >

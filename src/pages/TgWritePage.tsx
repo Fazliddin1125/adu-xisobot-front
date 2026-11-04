@@ -6,6 +6,7 @@ import { AppealForm } from '../components/AppealForm'
 import { useToast } from '../components/Toast'
 import { formatTime } from '../lib/period'
 import { haptic } from '../lib/telegram'
+import { ThemeButton } from '../components/ThemeToggle'
 
 /**
  * Bot ichida ochiladigan ixcham sahifa (Telegram WebApp): ish yozish va bugungi ishlar.
@@ -22,19 +23,20 @@ export function TgWritePage() {
     <div className="tech-bg min-h-dvh px-4 pt-5 pb-10">
       <div className="mx-auto max-w-lg">
         <header className="mb-4 flex items-center gap-3">
-          <span className="flex size-10 items-center justify-center rounded-lg border border-line bg-white text-brand-600 shadow-card">
+          <span className="flex size-10 items-center justify-center rounded-lg border border-line bg-surface text-brand-600 shadow-card">
             <PenLine className="size-5" strokeWidth={2} aria-hidden />
           </span>
           <div className="min-w-0">
             <h1 className="text-lg leading-tight font-semibold text-slate-900">Ish yozish</h1>
             <p className="truncate text-xs text-slate-500">{user?.fullName}</p>
           </div>
-          <span className="ml-auto rounded-md border border-line bg-white px-2 py-1 font-mono text-xs text-slate-600">
+          <ThemeButton className="ml-auto" />
+          <span className="rounded-md border border-line bg-surface px-2 py-1 font-mono text-xs text-slate-600">
             Bugun: <b className="text-slate-900">{list.length}</b>
           </span>
         </header>
 
-        <section className="rounded-xl border border-line bg-white p-4 shadow-card">
+        <section className="rounded-xl border border-line bg-surface p-4 shadow-card">
           <AppealForm
             submitLabel="Saqlash"
             resetOnSuccess
@@ -53,7 +55,7 @@ export function TgWritePage() {
           />
         </section>
 
-        <section className="mt-4 rounded-xl border border-line bg-white shadow-card">
+        <section className="mt-4 rounded-xl border border-line bg-surface shadow-card">
           <h2 className="border-b border-line px-4 py-2.5 text-[13px] font-semibold text-slate-700">Bugungi ishlarim</h2>
           {!list.length ? (
             <p className="px-4 py-6 text-center text-sm text-slate-500">Bugun hali ish yozilmagan</p>

@@ -35,7 +35,7 @@ export default function App() {
     if (telegramError)
       return (
         <div className="tech-bg flex min-h-dvh items-center justify-center p-6 text-center">
-          <div className="max-w-sm rounded-xl border border-line bg-white p-6 shadow-card">
+          <div className="max-w-sm rounded-xl border border-line bg-surface p-6 shadow-card">
             <p className="font-semibold text-slate-900">Kirib bo‘lmadi</p>
             <p className="mt-2 text-sm text-slate-600">{telegramError}</p>
           </div>

@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Qorong'i rejim: <html class="dark"> (lib/theme.ts boshqaradi) */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /*
  * Texnik dashboard dizayn tizimi (Linear / Vercel / Stripe uslubida).
  * Sovuq kulranglar (slate-* nomi saqlangan — butun sayt shu tokenlardan foydalanadi),
@@ -55,6 +58,7 @@
   --color-col-green: #ecfbf2;
 
   --color-page: #fafafa;
+  --color-surface: #ffffff;
   --color-sidebar: #ffffff;
   --color-hover: rgba(24, 24, 27, 0.045);
   --color-line: #e4e4e7;
@@ -75,8 +79,8 @@
   --radius-3xl: 0.9rem;
 
   /* Soyalar o'rniga — 1px chegara va juda yengil soya */
-  --shadow-card: 0 0 0 1px #e4e4e7, 0 1px 2px rgba(24, 24, 27, 0.04);
-  --shadow-soft: 0 0 0 1px #e4e4e7, 0 1px 3px rgba(24, 24, 27, 0.05);
+  --shadow-card: 0 0 0 1px var(--color-line), 0 1px 2px rgba(24, 24, 27, 0.04);
+  --shadow-soft: 0 0 0 1px var(--color-line), 0 1px 3px rgba(24, 24, 27, 0.05);
   --shadow-notion: 0 0 0 1px rgba(24, 24, 27, 0.08), 0 24px 48px -12px rgba(24, 24, 27, 0.28);
 
   --animate-toast-in: toast-in 0.2s ease-out;
@@ -147,6 +151,65 @@ body {
   line-height: 1.55;
 }
 
+/*
+ * Qorong'i rejim: neytral shkala teskari (slate-900 — eng och matn), sirtlar qora-kulrang,
+ * teglar to'q fon + och matn. Komponentlar o'zgarmaydi — faqat tokenlar.
+ */
+.dark {
+  color-scheme: dark;
+  --color-slate-50: #111114;
+  --color-slate-100: #1c1c20;
+  --color-slate-200: #27272a;
+  --color-slate-300: #3f3f46;
+  --color-slate-400: #71717a;
+  --color-slate-500: #a1a1aa;
+  --color-slate-600: #c4c4cc;
+  --color-slate-700: #d4d4d8;
+  --color-slate-800: #e4e4e7;
+  --color-slate-900: #fafafa;
+
+  --color-brand-50: #12203d;
+  --color-brand-100: #1b2d55;
+  --color-brand-500: #60a5fa;
+  --color-brand-600: #3b82f6;
+  --color-brand-700: #2563eb;
+
+  --color-tag-gray-bg: #232327;
+  --color-tag-gray: #c4c4cc;
+  --color-tag-blue-bg: #12223f;
+  --color-tag-blue: #93b4ff;
+  --color-tag-green-bg: #0f2a1c;
+  --color-tag-green: #6ee7a0;
+  --color-tag-yellow-bg: #2b220c;
+  --color-tag-yellow: #f5c451;
+  --color-tag-orange-bg: #2e1a0e;
+  --color-tag-orange: #fdba74;
+  --color-tag-red-bg: #2d1214;
+  --color-tag-red: #fca5a5;
+  --color-tag-purple-bg: #221836;
+  --color-tag-purple: #c4b5fd;
+
+  --color-ink-red: #f87171;
+  --color-ink-green: #4ade80;
+
+  --color-col-gray: #141417;
+  --color-col-blue: #0f192c;
+  --color-col-yellow: #1d180c;
+  --color-col-green: #0d1d15;
+
+  --color-page: #09090b;
+  --color-surface: #131316;
+  --color-sidebar: #0e0e11;
+  --color-hover: rgba(255, 255, 255, 0.06);
+  --color-line: #26262b;
+  --color-line-strong: #36363d;
+
+  --color-good-ink: #4ade80;
+  --shadow-notion: 0 0 0 1px #2a2a30, 0 24px 48px -12px rgba(0, 0, 0, 0.7);
+  --grid-line: rgba(255, 255, 255, 0.035);
+  --glow: rgba(59, 130, 246, 0.14);
+}
+
 ::selection {
   background: rgba(37, 99, 235, 0.18);
 }
@@ -163,9 +226,9 @@ body {
 .app-bg {
   background-color: var(--color-page);
   background-image:
-    radial-gradient(1200px 420px at 50% -120px, rgba(37, 99, 235, 0.09), transparent 70%),
-    linear-gradient(to right, rgba(24, 24, 27, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(24, 24, 27, 0.045) 1px, transparent 1px);
+    radial-gradient(1200px 420px at 50% -120px, var(--glow, rgba(37, 99, 235, 0.09)), transparent 70%),
+    linear-gradient(to right, var(--grid-line, rgba(24, 24, 27, 0.045)) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line, rgba(24, 24, 27, 0.045)) 1px, transparent 1px);
   background-size:
     100% 100%,
     48px 48px,

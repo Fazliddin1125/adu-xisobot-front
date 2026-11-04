@@ -15,10 +15,10 @@ export function Modal({ title, onClose, children, wide }: { title: string; onClo
         role="dialog"
         aria-modal="true"
         aria-label={title}
-        className={`max-h-[92vh] w-full overflow-y-auto rounded-t-2xl bg-white shadow-notion sm:rounded-2xl ${wide ? 'sm:max-w-3xl' : 'sm:max-w-lg'}`}
+        className={`max-h-[92vh] w-full overflow-y-auto rounded-t-2xl bg-surface shadow-notion sm:rounded-2xl ${wide ? 'sm:max-w-3xl' : 'sm:max-w-lg'}`}
         onMouseDown={(e) => e.stopPropagation()}
       >
-        <header className="sticky top-0 z-10 flex items-center justify-between border-b border-line bg-white/95 px-4 py-2.5 backdrop-blur sm:px-5">
+        <header className="sticky top-0 z-10 flex items-center justify-between border-b border-line bg-surface/95 px-4 py-2.5 backdrop-blur sm:px-5">
           <h2 className="text-sm font-medium text-slate-700">{title}</h2>
           <button type="button" onClick={onClose} className="flex size-8 items-center justify-center rounded-lg text-slate-400 hover:bg-hover hover:text-slate-700" aria-label="Yopish">
             <X className="size-4" strokeWidth={2} />
